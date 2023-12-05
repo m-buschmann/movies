@@ -61,6 +61,7 @@ class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100, collation='NOCASE'), nullable=False, unique=True)
     genres = db.relationship('MovieGenre', backref='movie', lazy=True)
+    tags = db.relationship('Tags', backref='tags', lazy=True)
 
 class MovieGenre(db.Model):
     __tablename__ = 'movie_genres'
@@ -69,9 +70,10 @@ class MovieGenre(db.Model):
     genre = db.Column(db.String(255), nullable=False, server_default='')
 
 class Tags(db.Model):
-    __tablename__ = 'tags'
+    __tablename__ = 'movie_tags'
     id = db.Column(db.Integer, primary_key=True)
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), nullable=False)
+    tag = db.Column(db.String(255), nullable=False, server_default='')
 
 
 def check_and_read_data(db):
@@ -101,10 +103,12 @@ def check_and_read_data(db):
                 count += 1
                 if count % 100 == 0:
                     print(count, " movies read")
-    
+
+def check_tags(db):
+    #TODO: evl sortieren welche tags wir ausgeben wollen, nicht nur den ersten
     if Tags.query.count() == 0:
         # read movies from csv
-        with open('data\tags.csv', newline='', encoding='utf8') as csvfile:
+        with open('data/tags.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             count = 0
             for row in reader:
@@ -112,20 +116,35 @@ def check_and_read_data(db):
                     try:
                         id = row[1]
                         tag = row[2]
-                        movie = Tags(id=id, tag=tag)
-                        db.session.add(movie)
+                        tags = Tags(id=id, tag=tag)
+                        db.session.add(tags)
                         db.session.commit()  # save data to database
                     except IntegrityError:
-                        print("Ignoring duplicate movieID: " + id)
+                        #print("Ignoring duplicate movieID: " + id)
                         db.session.rollback()
                         pass
                 count += 1
                 if count % 100 == 0:
                     print(count, " tags read")
+    count_tags = Tags.query.count()
+    print(f"Number of entries in the Tags table: {count_tags}")
 
+
+count_tags = Movie.query.count()
+print(f"Number of entries in the Tags table: {count_tags}")
 # Create all database tables
 db.create_all()
 check_and_read_data(db)
+check_tags(db)
+
+
+
+"""# Fetch all tags from the database
+all_tags = Tags.query.all()
+
+# Print the tags
+for tag in all_tags:
+    print(f"Tag ID: {tag.id}, Movie ID: {tag.movie_id}, Tag: {tag.tag}")"""
 
 # Setup Flask-User and specify the User data-model
 user_manager = UserManager(app, db, User)
@@ -143,8 +162,9 @@ def movies_page():
     # String-based templates
 
     # first 10 movies
-    movies = Movie.query.limit(10).all()
+    movies = Movie.query.limit(200).all()
     tags = Tags.query.all()
+
     # only Romance movies
     # movies = Movie.query.filter(Movie.genres.any(MovieGenre.genre == 'Romance')).limit(10).all()
 

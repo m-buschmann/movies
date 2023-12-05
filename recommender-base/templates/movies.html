@@ -10,12 +10,10 @@
                 <p>
                     {% for g in m.genres %}
                     <span class="label label-default">{{ g.genre }}</span>
-                    {% for t in tags %}
-                        {% if t.movieID == g.movieID %}
-                            <span class="label label-default">{{ t.tag }}</span>
-                        {% endif %}
                     {% endfor %}
-                {% endfor %}
+                    {% for t in m.tags %}
+                    <span class="label label-default">{{ t.tag }}</span>
+                    {% endfor %}
                 
                 </p>
             </div>
