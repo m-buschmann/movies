@@ -68,6 +68,10 @@ class MovieGenre(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), nullable=False)
     genre = db.Column(db.String(255), nullable=False, server_default='')
 
+class Tags(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), nullable=False)
 
 
 def check_and_read_data(db):
@@ -97,7 +101,27 @@ def check_and_read_data(db):
                 count += 1
                 if count % 100 == 0:
                     print(count, " movies read")
-
+    
+    if Tags.query.count() == 0:
+        # read movies from csv
+        with open('data\tags.csv', newline='', encoding='utf8') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',')
+            count = 0
+            for row in reader:
+                if count > 0:
+                    try:
+                        id = row[1]
+                        tag = row[2]
+                        movie = Tags(id=id, tag=tag)
+                        db.session.add(movie)
+                        db.session.commit()  # save data to database
+                    except IntegrityError:
+                        print("Ignoring duplicate movieID: " + id)
+                        db.session.rollback()
+                        pass
+                count += 1
+                if count % 100 == 0:
+                    print(count, " tags read")
 
 # Create all database tables
 db.create_all()
@@ -120,7 +144,7 @@ def movies_page():
 
     # first 10 movies
     movies = Movie.query.limit(10).all()
-
+    tags = Tags.query.all()
     # only Romance movies
     # movies = Movie.query.filter(Movie.genres.any(MovieGenre.genre == 'Romance')).limit(10).all()
 
@@ -130,9 +154,15 @@ def movies_page():
     #     .filter(Movie.genres.any(MovieGenre.genre == 'Horror')) \
     #     .limit(10).all()
 
-    return render_template("movies.html", movies=movies)
+    return render_template("movies.html", movies=movies, tags = tags)
 
 
 # Start development web server
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
+
+
+'''
+include more of the data: 
+tags, ratings, links table (create link from time table )
+'''
