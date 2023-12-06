@@ -11,6 +11,7 @@ db.init_app(app)
 
 
 #TODO: evl sortieren welche tags wir ausgeben wollen
+#TODO: links zu den movies
 def check_and_read_data(db):
     # check if we have movies in the database
     # read data if database is empty
