@@ -1,6 +1,6 @@
 import csv
 from sqlalchemy.exc import IntegrityError
-from models import db, Movie, MovieGenre, Tags
+from models import db, Movie, MovieGenre, Tags, Links
 from flask import Flask
 
 app = Flask(__name__)
@@ -8,10 +8,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///movie_recommender.sqlite'  # 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-
-
-#TODO: evl sortieren welche tags wir ausgeben wollen
-#TODO: links zu den movies
 def check_and_read_data(db):
     # check if we have movies in the database
     # read data if database is empty
@@ -50,6 +46,16 @@ def check_and_read_data(db):
                                             n_tag = Tags(movie_id=movie_id, tag=tag.strip())
                                             db.session.add(n_tag)
 
+                        links_file_path = 'data/links.csv'
+
+                        with open(links_file_path, newline='', encoding='utf8') as links_csvfile:
+                            link_reader = csv.reader(links_csvfile, delimiter=',')
+                            for link_row in link_reader:
+                                if link_row[0] == movie_id:
+                                    imdb_id = Links(movie_id=movie_id, link = link_row[1])
+                                    #print(link_row[1])
+                                    db.session.add(imdb_id)
+
                         db.session.commit()  # save data to database
                     except IntegrityError:
                         print("Ignoring duplicate movie: " + title)
@@ -71,5 +77,8 @@ if __name__ == '__main__':
         # Now you can perform other operations outside the app context, if needed
         count_tags = Tags.query.count()
         count_movies = Movie.query.count()
+        count_links = Links.query.count()
         print(f"Number of entries in the Tags table: {count_tags}")
         print(f"Number of entries in the Movies table: {count_movies}")
+        print(f"Number of entries in the Links table: {count_links}")
+

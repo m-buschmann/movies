@@ -1,9 +1,10 @@
+#https://www.imdb.com/title/tt
 # Contains parts from: https://flask-user.readthedocs.io/en/latest/quickstart_app.html
 
 from flask import Flask, render_template
 from flask_user import login_required, UserManager
 
-from models import db, User, Movie, MovieGenre, Tags
+from models import db, User, Movie, MovieGenre, Tags, Links
 from read_data import check_and_read_data
 
 # Class-based application configuration
