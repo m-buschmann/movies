@@ -61,7 +61,7 @@ class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100, collation='NOCASE'), nullable=False, unique=True)
     genres = db.relationship('MovieGenre', backref='movie', lazy=True)
-    tags = db.relationship('Tags', backref='tags', lazy=True)
+    tags = db.relationship('Tags', backref='movie', lazy=True)
 
 class MovieGenre(db.Model):
     __tablename__ = 'movie_genres'
@@ -81,7 +81,7 @@ def check_and_read_data(db):
     # read data if database is empty
     if Movie.query.count() == 0:
         # read movies from csv
-        with open('data/movies.csv', newline='', encoding='utf8') as csvfile:
+        with open('C:\\Users\\j k\\Documents\\uni\\semester5\\aiweb\\aiweb\\movies\\movies-1\\recommender-base\\data\\movies.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             count = 0
             for row in reader:
@@ -89,13 +89,28 @@ def check_and_read_data(db):
                     try:
                         id = row[0]
                         title = row[1]
-                        movie = Movie(id=id, title=title)
-                        db.session.add(movie)
+                        n_movie = Movie(id=id, title=title)
+                      
+                        db.session.add(n_movie)
                         genres = row[2].split('|')  # genres is a list of genres
                         for genre in genres:  # add each genre to the movie_genre table
                             movie_genre = MovieGenre(movie_id=id, genre=genre)
                             db.session.add(movie_genre)
                         db.session.commit()  # save data to database
+                        movie_id = row[0]
+                        # Assuming tags are in a separate CSV file named tags.csv with columns: movie_id, tags
+                        tags_file_path = 'C:\\Users\\j k\\Documents\\uni\\semester5\\aiweb\\aiweb\\movies\\movies-1\\recommender-base\\data\\tags.csv'
+
+                        with open(tags_file_path, newline='', encoding='utf8') as tags_csvfile:
+                            tags_reader = csv.reader(tags_csvfile, delimiter=',')
+                            for tags_row in tags_reader:
+                                if tags_row[1] == movie_id:
+                                    tags = tags_row[2]
+                                    tags_list = tags.split(',')
+
+                                    for tag in tags_list:
+                                        n_tag = Tags(movie_id=movie_id, tag=tag.strip())
+                                        db.session.add(n_tag)
                     except IntegrityError:
                         print("Ignoring duplicate movie: " + title)
                         db.session.rollback()
@@ -108,7 +123,7 @@ def check_tags(db):
     #TODO: evl sortieren welche tags wir ausgeben wollen, nicht nur den ersten
     if Tags.query.count() == 0:
         # read movies from csv
-        with open('data/tags.csv', newline='', encoding='utf8') as csvfile:
+        with open("C:\\Users\\j k\\Documents\\uni\\semester5\\aiweb\\aiweb\\movies\\movies-1\\recommender-base\\data\\tags.csv", newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             count = 0
             for row in reader:
@@ -130,12 +145,12 @@ def check_tags(db):
     print(f"Number of entries in the Tags table: {count_tags}")
 
 
-count_tags = Movie.query.count()
-print(f"Number of entries in the Tags table: {count_tags}")
+#count_tags = Movie.query.count()
+#print(f"Number of entries in the Tags table: {count_tags}")
 # Create all database tables
 db.create_all()
 check_and_read_data(db)
-check_tags(db)
+#check_tags(db)
 
 
 
@@ -162,7 +177,7 @@ def movies_page():
     # String-based templates
 
     # first 10 movies
-    movies = Movie.query.limit(200).all()
+    movies = Movie.query.limit(10).all()
     tags = Tags.query.all()
 
     # only Romance movies
