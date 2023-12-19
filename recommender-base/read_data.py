@@ -56,12 +56,14 @@ def check_and_read_data(db):
                                     #print(link_row[1])
                                     db.session.add(imdb_id)
                         
-                        ratings_file_path = 'data/ratings_small.csv'
+                        """ratings_file_path = 'data/ratings_small.csv'
 
                         with open(ratings_file_path, newline='', encoding='utf8') as ratings_csvfile:
                             ratings_reader = csv.reader(ratings_csvfile, delimiter=',')
+                            next(ratings_reader)  # Skip header row
                             for ratings_row in ratings_reader:
                                 user_id = ratings_row[0]
+                                print(user_id)
 
                                 # Check if the user already exists in the database
                                 existing_user = db.session.query(Rating_users).filter_by(user_id=user_id).first()
@@ -69,7 +71,7 @@ def check_and_read_data(db):
                                 if not existing_user:
                                     # Insert the user into the database
                                     new_user = Rating_users(user_id=user_id)
-                                    db.session.add(new_user)
+                                    db.session.add(new_user)"""
 
                         db.session.commit()  # save data to database
                     except IntegrityError:
@@ -80,6 +82,23 @@ def check_and_read_data(db):
                 if count % 100 == 0:
                     print(count, " movies read")
 
+    ratings_file_path = 'data/ratings_small.csv'
+    with open(ratings_file_path, newline='', encoding='utf8') as ratings_csvfile:
+        ratings_reader = csv.reader(ratings_csvfile, delimiter=',')
+        next(ratings_reader)  # Skip header row
+        for ratings_row in ratings_reader:
+            id = ratings_row[0]
+            print(id)
+
+            # Check if the user already exists in the database
+            existing_user = db.session.query(Rating_users).filter_by(user_id=id).first()
+
+            if not existing_user:
+                # Insert the user into the database
+                new_user = Rating_users(user_id=id)
+                db.session.add(new_user)
+
+    db.session.commit()  # save data to database
 
 if __name__ == '__main__':
     with app.app_context():
@@ -98,4 +117,7 @@ if __name__ == '__main__':
         print(f"Number of entries in the Movies table: {count_movies}")
         print(f"Number of entries in the Links table: {count_links}")
         print(f"Number of entries in the Users table: {count_users}")
+        user_ids = [user.user_id for user in Rating_users.query.all()]
+        print("User IDs in Rating_users:", user_ids)
+
 

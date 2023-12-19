@@ -59,4 +59,4 @@ class Ratings(db.Model):
 class Rating_users(db.Model):
     __tablename__ = 'rating_users'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('rating_users.id'), nullable=False)
