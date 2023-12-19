@@ -7,7 +7,7 @@
         <div class="panel panel-default">
             <div class="panel-heading"><b>{{ m.title }}</b></div>
             <a href="https://www.imdb.com/title/tt{{m.imdb_id[0].link}}" target="_blank">Visit IMDb here</a>
-                <!-- <img src="{{ m.poster }}" class="img-responsive" alt="Image"> -->
+                <!-- TODO: poster anzeigen? <img src="{{ m.poster }}" class="img-responsive" alt="Image"> -->
             <div class="panel-body">
                 <p>
                     {% for g in m.genres %}

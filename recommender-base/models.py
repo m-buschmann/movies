@@ -48,3 +48,15 @@ class Links(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), nullable=False)
     link = db.Column(db.String(255), nullable=False, server_default='')
+
+
+class Ratings(db.Model):
+    __tablename__ = 'ratings'
+    id = db.Column(db.Integer, primary_key=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), nullable=False)
+    rating = db.Column(db.Float, nullable=False, server_default='')
+
+class Rating_users(db.Model):
+    __tablename__ = 'rating_users'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

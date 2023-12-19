@@ -1,6 +1,6 @@
 import csv
 from sqlalchemy.exc import IntegrityError
-from models import db, Movie, MovieGenre, Tags, Links
+from models import db, Movie, MovieGenre, Tags, Links, Rating_users
 from flask import Flask
 
 app = Flask(__name__)
@@ -55,6 +55,21 @@ def check_and_read_data(db):
                                     imdb_id = Links(movie_id=movie_id, link = link_row[1])
                                     #print(link_row[1])
                                     db.session.add(imdb_id)
+                        
+                        ratings_file_path = 'data/ratings_small.csv'
+
+                        with open(ratings_file_path, newline='', encoding='utf8') as ratings_csvfile:
+                            ratings_reader = csv.reader(ratings_csvfile, delimiter=',')
+                            for ratings_row in ratings_reader:
+                                user_id = ratings_row[0]
+
+                                # Check if the user already exists in the database
+                                existing_user = db.session.query(Rating_users).filter_by(user_id=user_id).first()
+
+                                if not existing_user:
+                                    # Insert the user into the database
+                                    new_user = Rating_users(user_id=user_id)
+                                    db.session.add(new_user)
 
                         db.session.commit()  # save data to database
                     except IntegrityError:
@@ -78,7 +93,9 @@ if __name__ == '__main__':
         count_tags = Tags.query.count()
         count_movies = Movie.query.count()
         count_links = Links.query.count()
+        count_users = Rating_users.query.count()
         print(f"Number of entries in the Tags table: {count_tags}")
         print(f"Number of entries in the Movies table: {count_movies}")
         print(f"Number of entries in the Links table: {count_links}")
+        print(f"Number of entries in the Users table: {count_users}")
 
