@@ -6,6 +6,10 @@ from flask_user import login_required, UserManager
 
 from models import db, User, Movie, MovieGenre, Tags, Links
 from read_data import check_and_read_data
+import chromadb
+
+# Initialize ChromaDB client
+chroma_client = chromadb.Client()
 
 # Class-based application configuration
 class ConfigClass(object):

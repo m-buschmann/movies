@@ -2,6 +2,10 @@ import csv
 from sqlalchemy.exc import IntegrityError
 from models import db, Movie, MovieGenre, Tags, Links, Rating_users
 from flask import Flask
+import chromadb
+
+# Initialize ChromaDB client
+chroma_client = chromadb.Client()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///movie_recommender.sqlite'  # Update with your database URI
@@ -88,7 +92,6 @@ def check_and_read_data(db):
         next(ratings_reader)  # Skip header row
         for ratings_row in ratings_reader:
             id = ratings_row[0]
-            print(id)
 
             # Check if the user already exists in the database
             existing_user = db.session.query(Rating_users).filter_by(user_id=id).first()
@@ -100,6 +103,25 @@ def check_and_read_data(db):
 
     db.session.commit()  # save data to database
 
+def embedd(db, chroma_client):
+    collection = chroma_client.create_collection(name="movie_collection")
+
+    # Retrieve movies from the database
+    movies = Movie.query.all()
+
+    for movie in movies:
+        # You can customize the document content based on your movie data
+        document_content = f"Movie Title: {movie.title}, Genres: {', '.join([genre.genre for genre in movie.genres]), 'Tags: ', ', '.join([tag.tag for tag in movie.tags])}"
+
+        # Add movie document to the collection
+        collection.add(
+            documents=[document_content],
+            metadatas=[{"movie_id": movie.id}],
+            ids=[str(movie.id)]
+        )
+    print("Movies embedded successfully")
+    return collection
+
 if __name__ == '__main__':
     with app.app_context():
         # Create the tables
@@ -107,6 +129,9 @@ if __name__ == '__main__':
 
         # Run your data check functions
         check_and_read_data(db)
+        
+        # Embed movies using ChromaDB
+        embedded_collection = embedd(db, chroma_client)
 
         # Now you can perform other operations outside the app context, if needed
         count_tags = Tags.query.count()
