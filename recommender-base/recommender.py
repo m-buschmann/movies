@@ -1,10 +1,11 @@
 #https://www.imdb.com/title/tt
 # Contains parts from: https://flask-user.readthedocs.io/en/latest/quickstart_app.html
 
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template, request
+from flask_login import current_user
 from flask_user import login_required, UserManager
-
-from models import db, User, Movie, MovieGenre, Tags, Links
+from sqlalchemy import func, desc
+from models import db, User, Movie, MovieGenre, Tags, Links, Ratings
 from read_data import check_and_read_data
 import chromadb
 
@@ -50,7 +51,32 @@ def home_page():
     # render home.html template
     return render_template("home.html")
 
+@app.route('/update-rating', methods=['POST'])
+@login_required  # User must be authenticated
+def update_rating():
+    try:
+        rating = int(request.form.get('rating'))
+        movieID = request.form.get('movie_id')
+        print(movieID)
+        # Save the new rating to the database
+        new_rating = Ratings(id=current_user.id, movie_id=movieID, rating=rating)
+        db.session.add(new_rating)
+        db.session.commit()
 
+        # Calculate the new average rating
+        average_rating = (
+            db.session.query(func.avg(Ratings.rating))
+            .filter_by(movie_id=request.form.get('movie_id'))
+            .scalar()
+        )
+        new_average = round(average_rating, 2) if average_rating is not None else None
+
+        return jsonify({'newAverage': new_average})
+
+    except Exception as e:
+        print('Error updating rating:', str(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
+    
 # The Members page is only accessible to authenticated users via the @login_required decorator
 @app.route('/movies')
 @login_required  # User must be authenticated
@@ -58,18 +84,20 @@ def movies_page():
     # String-based templates
 
     # first 10 movies
-    movies = Movie.query.limit(10).all()
-
-    # only Romance movies
-    # movies = Movie.query.filter(Movie.genres.any(MovieGenre.genre == 'Romance')).limit(10).all()
-
-    # only Romance AND Horror movies
-    # movies = Movie.query\
-    #     .filter(Movie.genres.any(MovieGenre.genre == 'Romance')) \
-    #     .filter(Movie.genres.any(MovieGenre.genre == 'Horror')) \
-    #     .limit(10).all()
-
-    return render_template("movies.html", movies=movies)
+    movies =  Movie.query.join(Ratings).group_by(Movie.id).order_by(desc(func.avg(Ratings.rating))).limit(10).all()
+       # Calculate average rating for each movie
+    average = []
+    for m in movies:
+        
+        average_rating = (
+            db.session.query(func.avg(Ratings.rating))
+            .filter_by(movie_id=m.id)
+            .scalar()
+        )
+        # Assign the calculated average_rating to the movie
+        average.append(round(average_rating, 2) if average_rating is not None else None)
+    print(average)
+    return render_template("movies.html", movies=movies, average = average)
 
 
 # Start development web server

@@ -1,5 +1,35 @@
 {% extends "flask_user_layout.html" %}
 {% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function addRating(rating) {
+        // You need to replace this URL with the endpoint on your server that handles rating updates
+        const apiUrl = '/update-rating';
+
+        // You need to send the current rating and any additional data to the server
+        const data = {
+            rating: rating,
+            movieID: id
+            // Add any additional data needed for your server-side logic
+        };
+
+        // Send a POST request to the server
+        $.ajax({
+            type: 'POST',
+            url: apiUrl,
+            data: data,
+            success: function (response) {
+                // Update the average rating on the frontend
+                $('#averageRating').text(response.newAverage);
+            },
+            error: function (error) {
+                console.error('Error updating rating:', error);
+            }
+        });
+    }
+</script>
+
 <div class="container">
     <h2>Movies</h2>
 
@@ -18,13 +48,15 @@
                     {% endfor %}
                 </p>
             </div>
-              <div class="panel-footer">Rate:
-                  <a href="#" class="card-link">1</a>
-                  <a href="#" class="card-link">2</a>
-                  <a href="#" class="card-link">3</a>
-                  <a href="#" class="card-link">4</a>
-                  <a href="#" class="card-link">5</a> Stars
-              </div>
+             
+            Average Rating: {{ average[loop.index0] }}
+            <div class="panel-footer">Rate:
+                <a href="#" class="card-link" onclick="addRating(1)">1</a>
+                <a href="#" class="card-link" onclick="addRating(2)">2</a>
+                <a href="#" class="card-link" onclick="addRating(3)">3</a>
+                <a href="#" class="card-link" onclick="addRating(4)">4</a>
+                <a href="#" class="card-link" onclick="addRating(5)">5</a> Stars
+            </div>
         </div>
     {% endfor %}
 </div>
