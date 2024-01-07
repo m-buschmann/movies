@@ -96,18 +96,22 @@ def home_page():
 @login_required  # User must be authenticated
 def movies_page():
 
-    page = request.args.get(get_page_parameter(), type=int, default=1) #getting page number from url
- 
-    total = db.session.query(Movie.id).count() #counting total number of movies
-    per_page = 20 #number of movies shown per page
+    try:
+        page = request.args.get(get_page_parameter(), type=int, default=1) #getting page number from url
+    
+        total = db.session.query(Movie.id).count() #counting total number of movies
+        per_page = 20 #number of movies shown per page
 
-    pagination = Pagination(page=page, total=total, per_page=per_page, css_framework='bootstrap4') #creating pagination object
+        pagination = Pagination(page=page, total=total, per_page=per_page, css_framework='bootstrap4') #creating pagination object
 
-    movies = db.session.query(Movie, MovieLinks).join(MovieLinks).order_by(Movie.title)#querying movies from database
-    movies = movies.paginate(page=page, per_page=per_page) #paginating them
+        movies = db.session.query(Movie, MovieLinks).join(MovieLinks).order_by(Movie.title)#querying movies from database
+        movies = movies.paginate(page=page, per_page=per_page) #paginating them
 
-    return render_template( "movies.html", movies = movies, pagination=pagination, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags) #rendering movies.html template with movies and pagination object
+        return render_template( "movies.html", movies = movies, pagination=pagination, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags) #rendering movies.html template with movies and pagination object
 
+    except Exception as e:
+        db.session.rollback()
+        print(f"An error occurred: {e}")
 
 @app.route('/rate', methods=['POST'])
 @login_required  # User must be authenticated
