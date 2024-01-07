@@ -9,12 +9,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///movie_recommender.sqlite'  # 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
+import os
+
+# Get the directory of the current script
+current_directory = os.path.dirname(os.path.realpath(__file__))
+
+# Construct the absolute path to the "ratings.csv" file
+file_path = os.path.join(current_directory, 'data')
+
 def check_and_read_data(db):
     # check if we have movies in the database
     # read data if database is empty
     if Movie.query.count() == 0:
         # read movies from csv
-        with open(url_for('data', filename='movies.csv', newline='', encoding='utf8')) as csvfile:
+        with open('file_path/movies.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -41,7 +49,7 @@ def check_and_read_data(db):
                         pass
 
     if MovieLinks.query.count() == 0:   
-        with open(url_for('data', filename='links.csv', newline='', encoding='utf8')) as csvfile:
+        with open('file_path/links.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -63,7 +71,7 @@ def check_and_read_data(db):
                         db.session.rollback()
 
     if MovieTags.query.count() == 0:
-        with open(url_for('data', filename='tags.csv', newline='', encoding='utf8')) as csvfile:
+        with open('file_path/tags.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -81,7 +89,7 @@ def check_and_read_data(db):
                         db.session.rollback()
 
     if Ratings.query.count() == 0:
-        with open(url_for('data', filename='ratings.csv', newline='', encoding='utf8')) as csvfile:
+        with open('file_path/ratings.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line

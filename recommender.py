@@ -47,7 +47,7 @@ db.init_app(app)  # initialize database
 db.create_all()  # create database if necessary
 user_manager = UserManager(app, db, User)  # initialize Flask-User management
 
-MODEL_PATH = url_for('instance', filename='BPR_model.pkl')
+#MODEL_PATH = url_for('instance', filename='BPR_model.pkl')
 
 import os
 
