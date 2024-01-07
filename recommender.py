@@ -110,7 +110,7 @@ def movies_page():
         db.session.rollback()
         print(f"An error occurred: {e}")
 
-@app.route('/rate')
+@app.route('/rate', methods=['POST'])
 @login_required  # User must be authenticated
 def rate():
     # get data from form
