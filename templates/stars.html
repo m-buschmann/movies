@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Pure CSS Star Ratings (Unintentional #codepenchallenge)</title>
+  
+  
+  <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+  <link rel='stylesheet' href='../static/stars.css'>
+
+  
+</head>
+
+<body>
+
+  <div class="rating" style="--stars: 5">
+    <div class="ratings">
+      <div class="rating__blank"><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+      </div>
+      <div class="rating__people"><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+      </div>
+      <div class="rating__you">
+        <input class="star" type="radio" name="rating" this.value="5"/>
+        <!-- I needed the line below to fix a weird white-space issue--><span style="margin: -0.14em"></span>
+        <input class="star" type="radio" name="rating" this.value="4"/>
+        <!-- I needed the line below to fix a weird white-space issue--><span style="margin: -0.14em"></span>
+        <input class="star" type="radio" name="rating" this.value="3"/>
+        <!-- I needed the line below to fix a weird white-space issue--><span style="margin: -0.14em"></span>
+        <input class="star" type="radio" name="rating" this.value="2"/>
+        <!-- I needed the line below to fix a weird white-space issue--><span style="margin: -0.14em"></span>
+        <input class="star" type="radio" name="rating" this.value="1"/>
+        <!-- I needed the line below to fix a weird white-space issue--><span style="margin: -0.14em"></span>
+      </div>
+    </div>
+  </div><input type="radio" class="btn" name="rating" value="0" />
+
+</body>
+
+</html>
