@@ -9,6 +9,7 @@ from read_data import check_and_read_data
 
 from datetime import datetime
 import pandas as pd
+import traceback
 
 from lenskit_tf import BPR
 import pickle
@@ -56,6 +57,10 @@ current_directory = os.path.dirname(os.path.realpath(__file__))
 
 # Define the relative path to the model file
 MODEL_PATH = os.path.join(current_directory, 'instance', 'BPR_model.pkl')
+
+@app.errorhandler(500)
+def internal_error(exception):
+   return "<pre>"+traceback.format_exc()+"</pre>"
 
 @app.cli.command('initdb')
 def initdb_command():
