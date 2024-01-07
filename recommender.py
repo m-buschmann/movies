@@ -25,7 +25,7 @@ class ConfigClass(object):
     SECRET_KEY = 'This is an INSECURE secret!! DO NOT use this in production!!'
 
     # Flask-SQLAlchemy settings
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///movie_recommender.sqlite'  # File-based SQL database #FIXME
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///movie_recommender.sqlite'  # File-based SQL database 
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # Avoids SQLAlchemy warning
 
     # Flask-User settings
@@ -105,7 +105,7 @@ def movies_page():
     movies = db.session.query(Movie, MovieLinks).join(MovieLinks).order_by(Movie.title)#querying movies from database
     movies = movies.paginate(page=page, per_page=per_page) #paginating them
 
-    return render_template( url_for("movies.html", movies = movies, pagination=pagination, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags)) #rendering movies.html template with movies and pagination object
+    return render_template( "movies.html", movies = movies, pagination=pagination, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags) #rendering movies.html template with movies and pagination object
 
 
 @app.route('/rate', methods=['POST'])
@@ -130,7 +130,7 @@ def rate():
 
     #TODO add loading screen
 
-    return render_template(url_for("rated.html", rating=rating_value))
+    return render_template("rated.html", rating=rating_value)
 
 @app.route('/recommendations')
 @login_required  # User must be authenticated
@@ -159,7 +159,7 @@ def recommendations():
 
     recom = [mov_links.filter(Movie.id == idx).first() for idx in recom_idx.index]
 #
-    return render_template(url_for("recommendations.html", movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags))
+    return render_template("recommendations.html", movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags)
 
 @app.route('/my_ratings')
 @login_required  # User must be authenticated
@@ -179,7 +179,7 @@ def my_ratings():
 
     movies = movies.paginate(page=page, per_page=per_page) #paginating them
 
-    return render_template(url_for("movies.html", movies = movies, pagination=pagination, db = db, user = user, Ratings = Ratings, MovieTags = MovieTags)) #rendering movies.html template with movies and pagination object
+    return render_template("movies.html", movies = movies, pagination=pagination, db = db, user = user, Ratings = Ratings, MovieTags = MovieTags) #rendering movies.html template with movies and pagination object
 
 # Start development web server
 if __name__ == '__main__':
