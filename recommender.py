@@ -102,7 +102,6 @@ def movies_page():
 def rate():
     # get data from form
     movieid = request.form.get('movieid')
-    print(movieid)
     rating_value = request.form.get('rating')
     userid = current_user.id
 
@@ -111,7 +110,7 @@ def rate():
     #check if rating already exists
     rating = Ratings.query.filter(Ratings.user_id == userid, Ratings.movie_id == movieid).first()
 
-    if not rating:
+    if not rating: #TODO add reset
         # save rating to database
         new_rate = Ratings(user_id=userid, movie_id=movieid, rating=rating_value, timestamp=datetime.now())
 
@@ -151,7 +150,7 @@ def recommendations():
 
     recom = [mov_links.filter(Movie.id == idx).first() for idx in recom_idx.index]
 #
-    return render_template("recommendations.html", movies = recom)
+    return render_template("recommendations.html", movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags)
 
 @app.route('/my_ratings')
 @login_required  # User must be authenticated
@@ -171,7 +170,7 @@ def my_ratings():
 
     movies = movies.paginate(page=page, per_page=per_page) #paginating them
 
-    return render_template("movies.html", movies = movies, pagination=pagination, db = db, user = user, Ratings = Ratings) #rendering movies.html template with movies and pagination object
+    return render_template("movies.html", movies = movies, pagination=pagination, db = db, user = user, Ratings = Ratings, MovieTags = MovieTags) #rendering movies.html template with movies and pagination object
 
 # Start development web server
 if __name__ == '__main__':

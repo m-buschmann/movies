@@ -16,7 +16,7 @@
                 <!-- Movie links -->
                 <p>
                     <a href="{{ l.imdb_link }}"> Visit IMDb here</a><br>
-                    <a href="{{ l.tmdb_link }}">Visit Tmdb here</a><br>
+                    <a href="{{ l.tmdb_link }}">Visit TMDB here</a><br>
                 <p>
                 <!-- Movie genres -->
                     {% for g in m.genres %}
@@ -41,7 +41,13 @@
                 <!--TODO Reset Button-->
                 {% else %}
 
-                {% include 'stars.html' %}
+                <div class="panel-footer movie-rating">Rate:
+                    <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=1 >⭐</a>
+                    <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=2 >⭐</a>
+                    <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=3 >⭐</a>
+                    <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=4 >⭐</a>
+                    <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=5 >⭐</a> Stars
+                </div>
 
                 {% endif %}	
         </div>
@@ -62,7 +68,7 @@
         event.preventDefault(); // Prevent the default anchor action
 
         var movieid = this.getAttribute('data-movieid');
-        var rating = this.textContent;
+        var rating = this.getAttribute('rating');
         var elem = this;
 
         // Create an AJAX request
@@ -91,4 +97,4 @@
     }
 </script>
 
-{% endblock %}
+{% endblock %}
