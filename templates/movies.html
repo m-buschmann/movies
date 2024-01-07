@@ -1,5 +1,7 @@
 {% extends "flask_user_layout.html" %}
 {% block content %}
+
+  
 <div class="container"> <!-- Container for Movies + its information -->
     <h2>Movies</h2>
     <!--TODO Search bar-->
@@ -13,34 +15,35 @@
 
                 <!-- Movie links -->
                 <p>
-                    <a href="{{ l.imdb_link }}">{{ l.imdb_link }}</a><br>
-                    <a href="{{ l.tmdb_link }}">{{ l.tmdb_link }}</a><br>
+                    <a href="{{ l.imdb_link }}"> Visit IMDb here</a><br>
+                    <a href="{{ l.tmdb_link }}">Visit Tmdb here</a><br>
                 <p>
                 <!-- Movie genres -->
                     {% for g in m.genres %}
                         <span class="label label-default">{{ g.genre }}</span> <!-- Movie genre -->
                     {% endfor %}
                 </p>
+                <p>
+                    <!-- Movie tags -->
+                    {% set tags = db.session.query(MovieTags).filter( m.id == MovieTags.movie_id).all()%}
+                    {% for t in tags %}
+                            <span class="label label-primary">{{ t.tag }}</span> <!-- Movie tag -->
+                    {% endfor %}
+                </p>
 
                 <!-- TODO include stars.html -->
             </div>
             
-                {% set test = db.session.query(Ratings).filter(Ratings.user_id == user, Ratings.movie_id == m.id).first()%}
-                {% if test%}
+                {% set rating = db.session.query(Ratings).filter(Ratings.user_id == user, Ratings.movie_id == m.id).first()%}
+                {% if rating%}
                     
-                <div class="panel-footer movie-rating">You have rated {{ test.rating|int }} Stars, thank you!</div>
+                <div class="panel-footer movie-rating">You have rated {{ rating.rating|int }} Stars, thank you!</div>
                 <!--TODO Reset Button-->
                 {% else %}
 
-            
-                <div class="panel-footer movie-rating">Rate:
-                    <a href="#" class="card-link" data-movieid= {{ m.id }} >1</a>
-                    <a href="#" class="card-link" data-movieid= {{ m.id }} >2</a>
-                    <a href="#" class="card-link" data-movieid= {{ m.id }} >3</a>
-                    <a href="#" class="card-link" data-movieid= {{ m.id }} >4</a>
-                    <a href="#" class="card-link" data-movieid= {{ m.id }}>5</a> Stars
-                </div>
-                {% endif %} 
+                {% include 'stars.html' %}
+
+                {% endif %}	
         </div>
                 
                 

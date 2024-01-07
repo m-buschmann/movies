@@ -1,0 +1,47 @@
+- let stars = 7
+- let i = 0
+.rating(style=`--stars: ${stars}`)
+	.ratings
+		.rating__blank
+			while i < stars
+				span.star
+				- i++
+			- i = 0
+		.rating__people
+			while i < stars
+				span.star
+				- i++
+			- i = stars
+		.rating__you
+			while i > 0
+				input(type="radio" class="star" name="rating" this.value=`${i--}`)/
+				// I needed the line below to fix a weird white-space issue
+				span(style="margin: -.14em;")
+<input type="radio" class="btn" name="rating" value="0" />
+
+// Footer
+-
+	let penfooter = {
+		author_id: "seto89",
+		author_name: "seto89",
+		author_avatar_id: "2463519",
+		universal: "KLaMXm"
+	};
+	let r = 0;
+
+footer#footer
+	#footer__author
+		#footer__author__who
+			span#footer__author__who--by
+			a#footer__author__who--link(href=`https://codepen.io/${penfooter.author_id}` target="_new" style=`--avatar: url(https://s.cdpn.io/profiles/user/${penfooter.author_avatar_id}/80.jpg)`)
+				= penfooter.author_name || penfooter.author_id
+		#footer__author__follow
+			a#footer__author__follow--link(href=`https://codepen.io/${penfooter.author_id}/pen/${penfooter.universal}`)
+	if (penfooter.related && penfooter.related.length > 0)
+		#footer__related
+			span#footer__related--text
+			#footer__related--box
+				while (r < penfooter.related.length)
+					a(href=`https://codepen.io/${penfooter.author_id}/pen/${penfooter.related[r].id}` title=`${penfooter.related[r].title || penfooter.related[r].id}`)
+						img(src=`https://codepen.io/${penfooter.author_id}/pen/${penfooter.related[r].id}/image/small`)
+					- r++

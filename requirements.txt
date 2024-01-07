@@ -1,4 +1,6 @@
+flask-paginate
 flask
 flask-sqlalchemy
 flask-user==1.0.2.2
-
+pandas
+lenskit-tf

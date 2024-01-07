@@ -94,7 +94,7 @@ def movies_page():
     movies = db.session.query(Movie, MovieLinks).join(MovieLinks).order_by(Movie.title)#querying movies from database
     movies = movies.paginate(page=page, per_page=per_page) #paginating them
 
-    return render_template("movies.html", movies = movies, pagination=pagination, db = db, user = current_user.id, Ratings = Ratings) #rendering movies.html template with movies and pagination object
+    return render_template("movies.html", movies = movies, pagination=pagination, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags) #rendering movies.html template with movies and pagination object
 
 
 @app.route('/rate', methods=['POST'])

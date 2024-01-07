@@ -1,0 +1,196 @@
+:root {
+	--stars: 'see html editor'; /* How many stars are there */
+	
+	--votes: 20; /* How many people have voted? */
+	--score: 70; /* ...out of (stars * votes) */
+}
+
+body {
+	font-family: "Helvetica";
+	font-size: 62.5%;
+}
+input {
+	font-family: inherit;
+}
+
+/*
+	.rating 					Contains .ratings, which contains .rating__blank, .rating__people, and .rating__you
+	.ratings  				Acts as a cosmetic container for all the different ratings.
+										I needed it to help me give the stars some space away from the .rating's border.
+										Plus, if I simply tried to modify .rating's padding, .rating__people's content width would act up and display a bit of shading despite the lack of a score (if --score were to be set to 0).
+	.star 						Star Icon styling which houses the shade and the outline.
+	.star:before			Star Shade
+	.star:after				Star Outline	
+	.rating__blank		The first/base layer.
+										This is what will give the .rating bar shape as the other .rating__* elements will be absolutely positioned as well as positioned over the base.
+	.rating__people		All the stars within this element are already shaded.
+										The magic comes from the overflow property being set to hidden as well as the width that gets readjusted based on the voting --score being calculated against the number of --votes multiplied by the number of --stars.
+	.rating__you			The final layer as well as the most interactive aspect of the rating system.
+										All of the .star elements within it are radio buttons instead of span tags.
+										The yellow outlined stars highlight your current rating whereas the yellow shaded stars highlight the rating you want to give it.
+*/
+
+.rating {
+	background-color: #7bf;
+	border: 4px solid #0003;
+	border-radius: 32px;
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	vertical-align: middle;
+	
+	&s {
+		margin: 8px 16px;
+		position: relative;
+	}
+	
+	& .star {
+		/* General Rating Star styles */
+		appearance: none;
+		box-sizing: border-box;
+		font-family: FontAwesome;
+		font-size: 3em;
+		margin: 0 -.1em;
+		position: relative;
+		
+		&:before, &:after {
+			display: inline-block;
+			padding: .05em .15em;
+			vertical-align: top;
+			transition: all .25s;
+		}
+		&:before {
+			/* Filled Star icon */
+			content: "\f005";
+			position: relative;
+		}
+		&:after {
+			/* Outline Star icon */
+			content: "\f006";
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+	}
+	
+	&__blank, &__people, &__you {
+		box-sizing: border-box;
+		white-space: nowrap;
+		transition: all 1s;
+	}
+	&__people, &__you {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+	}
+	
+	/* The base. Basically layer 0. */
+	&__blank {
+		& .star:before {
+			color: #ddd;
+			-webkit-text-stroke: 1px #000;
+		}
+		& .star:after {
+			color: #0003;
+		}
+	}
+	
+	/* The people's votes. Layer 1. */ 
+	&__people {
+		width: calc(100% * (var(--score) / (var(--votes) * var(--stars))));
+		overflow: hidden;
+		
+		& .star:before {
+			color: #39f;
+		}
+		& .star:after {
+			color: #0003;
+		}
+	}
+	
+	/* Your vote. Layer 2. */
+	&__you {
+		/*
+			The following property was necessary to rearrange the radio button values from 1-5
+			as the radio buttons within the HTML was ordered from 5 to 1 in order to make use of
+			the CSS combinators without much issue.
+		
+			You can comment/take out the direction property to see how this really works.
+		*/
+		direction: rtl;
+		
+		& .star {
+			cursor: pointer;
+			&:before, &:after { opacity: 0; }
+			
+			/* When you hover over a star, the hovered star along with the stars preceding it starts to highlight */
+			&:before {
+				color: #fc0;
+				text-shadow: 0px 0px 1px #000;
+			}
+			&:hover ~ .star, &:hover {
+				&:before { opacity: 1; }
+			}
+			
+			/* When a rating is selected, you will see a yellow outline of a star along with a subtle dark stroke which will inform you which rating you picked */
+			&:after {
+				color: #ff0;
+				-webkit-text-stroke: .025em #0006;
+			}
+			&:checked ~ .star, &:checked {
+				&:after { opacity: 1; }
+			}
+		}
+	}
+}
+
+/* Clear Rating button */
+.btn {
+	appearance: none;
+	background-color: #eee;
+	border-radius: 32px;
+	box-shadow: inset 0 0 0 1px #0003, inset 0 3px #fff6;
+	cursor: pointer;
+	display: inline-block;
+	margin-top: 8px;
+	padding: .4em .8em;
+	font-size: 1.25em;
+	transition: all .2s;
+	outline: none;
+	vertical-align: middle;
+	
+	&:hover, &:focus { background-color: #fff; }
+	&:active { background-color: #ddd; }
+	
+	&:after { content: "Clear Rating"; }
+}
+
+/* Rating Info box */
+.info {
+	border-top: 1px solid #0001;
+	margin-top: 8px;
+	padding: 1em;
+	
+	.num:before {
+		content: "???";
+	}
+	#rating_ {
+		&current:before {
+			counter-reset: num var(--score);
+			content: counter(num);
+		}
+		&max:before {
+			counter-reset: num var(--score_max);
+			content: counter(num);
+		}
+		&percent:before {
+			counter-reset: num var(--a);
+			content: counter(num);
+		}
+		&votes:before {
+			counter-reset: num var(--votes);
+			content: counter(num);
+		}
+	}
+}

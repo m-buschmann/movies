@@ -1,0 +1,444 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Fira+Mono:400,500|Fira+Sans:300,400,500,600,700");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css");
+#footer {
+  background-color: #364459;
+  border-top: 1px solid #fff3;
+  box-shadow: 0 -1px #0009;
+  color: #fff;
+  font-family: "Fira Sans";
+  font-size: 10px;
+  font-weight: 300;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000000000000000100000;
+}
+#footer__author {
+  display: flex;
+  flex-flow: row wrap;
+  font-size: 1.4em;
+  justify-content: space-evenly;
+}
+#footer__author__who {
+  display: inline-block;
+  padding: 1em;
+  vertical-align: middle;
+  flex: 1;
+}
+#footer__author__who--by {
+  color: #ddd;
+}
+#footer__author__who--by:before {
+  font-family: FontAwesome;
+  margin-right: 0.5em;
+  content: "";
+}
+#footer__author__who--by:after {
+  content: "Pen by";
+  margin-right: 0.5em;
+}
+#footer__author__who--link {
+  border-bottom: 1px solid #00aaff;
+  color: #fff;
+  display: inline-block;
+  font-weight: 600;
+  position: relative;
+  text-decoration: none;
+  transition: border-color 0.5s;
+  letter-spacing: -0.5em;
+  color: transparent;
+}
+#footer__author__who--link:hover {
+  border-color: fuchsia;
+}
+#footer__author__who--link:before {
+  content: "";
+  background-image: var(--avatar);
+  background-size: contain;
+  border: 1px solid #fff;
+  border-radius: 100%;
+  display: inline-block;
+  margin-right: 0.25em;
+  margin-top: -0.25em;
+  width: 0.75em;
+  height: 0.75em;
+  vertical-align: middle;
+}
+#footer__author__who--link:after {
+  content: "Rock Starwind";
+  letter-spacing: 0;
+  color: #fff;
+}
+#footer__author__follow {
+  display: inline-block;
+  padding: 1em;
+  vertical-align: middle;
+  flex: 1;
+  text-align: right;
+}
+#footer__author__follow--link {
+  border-bottom: 1px solid #00aaff;
+  color: #fff;
+  display: inline-block;
+  font-weight: 600;
+  position: relative;
+  text-decoration: none;
+  transition: border-color 0.5s;
+  border-width: 0;
+}
+#footer__author__follow--link:hover {
+  border-color: fuchsia;
+}
+#footer__author__follow--link:before {
+  font-family: FontAwesome;
+  margin-right: 0.5em;
+  content: "";
+}
+#footer__author__follow--link:after {
+  content: "Follow";
+  border-bottom: 1px solid #00aaff;
+  transition: border-color 0.5s;
+}
+#footer__author__follow--link:hover:after {
+  border-color: fuchsia;
+}
+#footer__author:after {
+  content: "";
+  clear: both;
+  display: block;
+}
+#footer__related {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.1));
+  box-shadow: 0 -1px #fff2, inset 0 1px #0002;
+  display: flex;
+  font-size: 1.4em;
+  overflow: hidden;
+  transition: max-height 1s;
+  align-items: center;
+}
+#footer__related--text {
+  display: inline-block;
+  padding: 1em;
+  vertical-align: middle;
+  color: #ddd;
+  flex: 0;
+}
+#footer__related--text:before {
+  font-family: FontAwesome;
+  margin-right: 0.5em;
+  content: "";
+}
+#footer__related--text:after {
+  content: "Related:";
+  display: inline-block;
+  vertical-align: middle;
+}
+#footer__related--box {
+  background: #0002;
+  border-left: 1px solid #0002;
+  box-shadow: -1px 0 #fff1;
+  box-sizing: border-box;
+  flex: 1;
+  overflow: auto;
+  padding: 0.5em;
+  white-space: nowrap;
+}
+#footer__related--box a {
+  border: 1px solid #fff3;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 0.25em;
+  opacity: 0.75;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.25s;
+  vertical-align: top;
+}
+#footer__related--box a:first-of-type {
+  margin-left: 0;
+}
+#footer__related--box a:last-of-type {
+  margin-right: 0;
+}
+#footer__related--box a:hover {
+  border-color: #fff6;
+  opacity: 1;
+}
+#footer__related--box a:hover:after {
+  opacity: 1;
+}
+#footer__related--box a:after {
+  content: attr(title);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #0009;
+  box-sizing: border-box;
+  color: #fff;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0.5em;
+  pointer-events: none;
+  text-overflow: ellipsis;
+  width: 100%;
+  height: 100%;
+  white-space: pre-wrap;
+  transition: all 0.25s;
+}
+#footer__related--box img {
+  width: 128px;
+  vertical-align: top;
+}
+#footer__links {
+  background-image: linear-gradient(to bottom, #fff1 0%, #fff1 50%, transparent 50%, transparent), linear-gradient(to bottom, rgba(0, 0, 0, 0.25), #fff1);
+  box-shadow: 0 -1px #fff2, inset 0 1px #0002, 0 1px #fff8, inset 0 -1px #0009;
+  font-size: 1.4em;
+  padding: 8px;
+  text-align: center;
+}
+#footer__links a {
+  border-bottom: 1px solid #00aaff;
+  color: #fff;
+  display: inline-block;
+  font-weight: 600;
+  position: relative;
+  text-decoration: none;
+  transition: border-color 0.5s;
+  margin: 0 0.5em;
+  padding: 0 0.5em;
+}
+#footer__links a:hover {
+  border-color: fuchsia;
+}
+#footer__links a:not(:last-of-type):after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -0.5em;
+  width: 1px;
+  background: #fff2;
+}
+
+@media screen and (max-height: 640px) {
+  #footer__related {
+    max-height: 1.5em;
+  }
+
+  #footer:hover #footer__related,
+#footer__related:focus-within {
+    max-height: 600px;
+  }
+}
+@media screen and (max-width: 960px) {
+  #footer__related--text {
+    display: none;
+  }
+}
+@media screen and (max-width: 480px) {
+  #footer__author__who--by:after {
+    display: none;
+  }
+
+  #footer__author__follow--link:after {
+    content: "Donate/Follow";
+  }
+
+  #footer__author__who, #footer__author__follow {
+    white-space: no-wrap;
+  }
+}
+:root {
+  --stars: "see html editor";
+  /* How many stars are there */
+  --votes: 20;
+  /* How many people have voted? */
+  --score: 70;
+  /* ...out of (stars * votes) */
+}
+
+body {
+  font-family: "Helvetica";
+  font-size: 62.5%;
+}
+
+input {
+  font-family: inherit;
+}
+
+/*
+  .rating           Contains .ratings, which contains .rating__blank, .rating__people, and .rating__you
+  .ratings          Acts as a cosmetic container for all the different ratings.
+                    I needed it to help me give the stars some space away from the .rating's border.
+                    Plus, if I simply tried to modify .rating's padding, .rating__people's content width would act up and display a bit of shading despite the lack of a score (if --score were to be set to 0).
+  .star             Star Icon styling which houses the shade and the outline.
+  .star:before      Star Shade
+  .star:after       Star Outline  
+  .rating__blank    The first/base layer.
+                    This is what will give the .rating bar shape as the other .rating__* elements will be absolutely positioned as well as positioned over the base.
+  .rating__people   All the stars within this element are already shaded.
+                    The magic comes from the overflow property being set to hidden as well as the width that gets readjusted based on the voting --score being calculated against the number of --votes multiplied by the number of --stars.
+  .rating__you      The final layer as well as the most interactive aspect of the rating system.
+                    All of the .star elements within it are radio buttons instead of span tags.
+                    The yellow outlined stars highlight your current rating whereas the yellow shaded stars highlight the rating you want to give it.
+*/
+.rating {
+  background-color: #7bf;
+  border: 4px solid #0003;
+  border-radius: 32px;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+  vertical-align: middle;
+  /* The base. Basically layer 0. */
+  /* The people's votes. Layer 1. */
+  /* Your vote. Layer 2. */
+}
+.ratings {
+  margin: 8px 16px;
+  position: relative;
+}
+.rating .star {
+  /* General Rating Star styles */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  box-sizing: border-box;
+  font-family: FontAwesome;
+  font-size: 3em;
+  margin: 0 -0.1em;
+  position: relative;
+}
+.rating .star:before, .rating .star:after {
+  display: inline-block;
+  padding: 0.05em 0.15em;
+  vertical-align: top;
+  transition: all 0.25s;
+}
+.rating .star:before {
+  /* Filled Star icon */
+  content: "";
+  position: relative;
+}
+.rating .star:after {
+  /* Outline Star icon */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.rating__blank, .rating__people, .rating__you {
+  box-sizing: border-box;
+  white-space: nowrap;
+  transition: all 1s;
+}
+.rating__people, .rating__you {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.rating__blank .star:before {
+  color: #ddd;
+  -webkit-text-stroke: 1px #000;
+}
+.rating__blank .star:after {
+  color: #0003;
+}
+.rating__people {
+  width: calc(100% * (var(--score) / (var(--votes) * var(--stars))));
+  overflow: hidden;
+}
+.rating__people .star:before {
+  color: #39f;
+}
+.rating__people .star:after {
+  color: #0003;
+}
+.rating__you {
+  /*
+    The following property was necessary to rearrange the radio button values from 1-5
+    as the radio buttons within the HTML was ordered from 5 to 1 in order to make use of
+    the CSS combinators without much issue.
+
+    You can comment/take out the direction property to see how this really works.
+  */
+  direction: rtl;
+}
+.rating__you .star {
+  cursor: pointer;
+  /* When you hover over a star, the hovered star along with the stars preceding it starts to highlight */
+  /* When a rating is selected, you will see a yellow outline of a star along with a subtle dark stroke which will inform you which rating you picked */
+}
+.rating__you .star:before, .rating__you .star:after {
+  opacity: 0;
+}
+.rating__you .star:before {
+  color: #fc0;
+  text-shadow: 0px 0px 1px #000;
+}
+.rating__you .star:hover ~ .star:before, .rating__you .star:hover:before {
+  opacity: 1;
+}
+.rating__you .star:after {
+  color: #ff0;
+  -webkit-text-stroke: 0.025em #0006;
+}
+.rating__you .star:checked ~ .star:after, .rating__you .star:checked:after {
+  opacity: 1;
+}
+
+/* Clear Rating button */
+.btn {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: #eee;
+  border-radius: 32px;
+  box-shadow: inset 0 0 0 1px #0003, inset 0 3px #fff6;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 8px;
+  padding: 0.4em 0.8em;
+  font-size: 1.25em;
+  transition: all 0.2s;
+  outline: none;
+  vertical-align: middle;
+}
+.btn:hover, .btn:focus {
+  background-color: #fff;
+}
+.btn:active {
+  background-color: #ddd;
+}
+.btn:after {
+  content: "Clear Rating";
+}
+
+/* Rating Info box */
+.info {
+  border-top: 1px solid #0001;
+  margin-top: 8px;
+  padding: 1em;
+}
+.info .num:before {
+  content: "???";
+}
+.info #rating_current:before {
+  counter-reset: num var(--score);
+  content: counter(num);
+}
+.info #rating_max:before {
+  counter-reset: num var(--score_max);
+  content: counter(num);
+}
+.info #rating_percent:before {
+  counter-reset: num var(--a);
+  content: counter(num);
+}
+.info #rating_votes:before {
+  counter-reset: num var(--votes);
+  content: counter(num);
+}
