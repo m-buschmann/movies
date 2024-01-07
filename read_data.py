@@ -1,11 +1,11 @@
 import csv
 from sqlalchemy.exc import IntegrityError
 from models import db, Movie, MovieGenre, MovieLinks, MovieTags, Ratings, User
-from flask import Flask
+from flask import Flask, url_for
 from datetime import date, datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///movie_recommender.sqlite'  # Update with your database URI
+app.config['SQLALCHEMY_DATABASE_URI'] = url_for('sqlite:///movie_recommender.sqlite')  # Update with your database URI #FIXME
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
@@ -14,7 +14,7 @@ def check_and_read_data(db):
     # read data if database is empty
     if Movie.query.count() == 0:
         # read movies from csv
-        with open('data/movies.csv', newline='', encoding='utf8') as csvfile:
+        with open(url_for('data/movies.csv'), newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -41,7 +41,7 @@ def check_and_read_data(db):
                         pass
 
     if MovieLinks.query.count() == 0:   
-        with open('data/links.csv', newline='', encoding='utf8') as csvfile:
+        with open(url_for('data/links.csv'), newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -63,7 +63,7 @@ def check_and_read_data(db):
                         db.session.rollback()
 
     if MovieTags.query.count() == 0:
-        with open('data/tags.csv', newline='', encoding='utf8') as csvfile:
+        with open(url_for('data/tags.csv'), newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -81,7 +81,7 @@ def check_and_read_data(db):
                         db.session.rollback()
 
     if Ratings.query.count() == 0:
-        with open('data/ratings.csv', newline='', encoding='utf8') as csvfile:
+        with open(url_for('data/ratings.csv'), newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
