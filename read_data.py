@@ -22,7 +22,7 @@ def check_and_read_data(db):
     # read data if database is empty
     if Movie.query.count() == 0:
         # read movies from csv
-        with open('file_path/movies.csv', newline='', encoding='utf8') as csvfile:
+        with open(f'{file_path}/movies.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -49,7 +49,7 @@ def check_and_read_data(db):
                         pass
 
     if MovieLinks.query.count() == 0:   
-        with open('file_path/links.csv', newline='', encoding='utf8') as csvfile:
+        with open(f'{file_path}/links.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -71,7 +71,7 @@ def check_and_read_data(db):
                         db.session.rollback()
 
     if MovieTags.query.count() == 0:
-        with open('file_path/tags.csv', newline='', encoding='utf8') as csvfile:
+        with open(f'{file_path}/tags.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -89,7 +89,7 @@ def check_and_read_data(db):
                         db.session.rollback()
 
     if Ratings.query.count() == 0:
-        with open('file_path/ratings.csv', newline='', encoding='utf8') as csvfile:
+        with open(f'{file_path}/ratings.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
