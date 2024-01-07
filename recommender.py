@@ -13,8 +13,6 @@ import pandas as pd
 from lenskit_tf import BPR
 import pickle
 
-import os
-
 # import sleep from python
 from time import sleep
 
@@ -49,6 +47,9 @@ db.init_app(app)  # initialize database
 db.create_all()  # create database if necessary
 user_manager = UserManager(app, db, User)  # initialize Flask-User management
 
+MODEL_PATH = url_for('instance', filename='BPR_model.pkl')
+
+import os
 
 # Get the directory of the current script
 current_directory = os.path.dirname(os.path.realpath(__file__))
