@@ -5,7 +5,7 @@ from flask import Flask, url_for
 from datetime import date, datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = url_for('sqlite:///movie_recommender.sqlite')  # Update with your database URI #FIXME
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///movie_recommender.sqlite'  # Update with your database URI #FIXME
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
