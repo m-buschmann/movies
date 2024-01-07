@@ -31,7 +31,6 @@
                     {% endfor %}
                 </p>
 
-                <!-- TODO include stars.html -->
             </div>
             
                 {% set rating = db.session.query(Ratings).filter(Ratings.user_id == user, Ratings.movie_id == m.id).first()%}
@@ -55,7 +54,7 @@
                 
     {% endfor %}
 
-    {{ pagination.links }}  <!-- Chossing the page -->
+    {{ pagination.links }}  <!-- Choosing the page -->
 
 </div>
 

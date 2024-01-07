@@ -1,6 +1,6 @@
 # Contains parts from: https://flask-user.readthedocs.io/en/latest/quickstart_app.html
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 from flask_user import login_required, UserManager, current_user
 from flask_paginate import Pagination, get_page_parameter
 
@@ -24,7 +24,7 @@ class ConfigClass(object):
     SECRET_KEY = 'This is an INSECURE secret!! DO NOT use this in production!!'
 
     # Flask-SQLAlchemy settings
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///movie_recommender.sqlite'  # File-based SQL database
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///movie_recommender.sqlite'  # File-based SQL database #FIXME
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # Avoids SQLAlchemy warning
 
     # Flask-User settings
@@ -47,9 +47,7 @@ db.init_app(app)  # initialize database
 db.create_all()  # create database if necessary
 user_manager = UserManager(app, db, User)  # initialize Flask-User management
 
-MODEL_PATH = 'instance/BPR_model.pkl'
-
-
+MODEL_PATH = url_for('instance/BPR_model.pkl')
 
 @app.cli.command('initdb')
 def initdb_command():
@@ -66,7 +64,7 @@ def fitBPR_command():
     df = pd.read_sql(db.session.query(Ratings.user_id, Ratings.movie_id, Ratings.rating).statement, con= db.session.connection())
     df = df.rename(columns={'user_id': 'user', 'movie_id': 'item'})
 
-    model = BPR(epochs = 20, batch_size = 20000).fit(df)
+    model = BPR(epochs = 200, batch_size = 20000).fit(df)
 
     # Save the model to a file using pickle
     with open(MODEL_PATH, 'wb') as model_file:
@@ -76,7 +74,7 @@ def fitBPR_command():
 @app.route('/')
 def home_page():
     # render home.html template
-    return render_template("home.html")
+    return render_template(url_for("home.html"))
 
 
 # The Members page is only accessible to authenticated users via the @login_required decorator
@@ -94,7 +92,7 @@ def movies_page():
     movies = db.session.query(Movie, MovieLinks).join(MovieLinks).order_by(Movie.title)#querying movies from database
     movies = movies.paginate(page=page, per_page=per_page) #paginating them
 
-    return render_template("movies.html", movies = movies, pagination=pagination, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags) #rendering movies.html template with movies and pagination object
+    return render_template( url_for("movies.html", movies = movies, pagination=pagination, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags)) #rendering movies.html template with movies and pagination object
 
 
 @app.route('/rate', methods=['POST'])
@@ -119,7 +117,7 @@ def rate():
 
     #TODO add loading screen
 
-    return render_template("rated.html", rating=rating_value)
+    return render_template(url_for("rated.html", rating=rating_value))
 
 @app.route('/recommendations')
 @login_required  # User must be authenticated
@@ -144,13 +142,11 @@ def recommendations():
     recom_idx = loaded_model.predict_for_user(user, movies) # get recommendations for the current user
     recom_idx = recom_idx.sort_values(ascending=False)[:RECOMMENDATIONS]#sort the series by value#
 
-    print(recom_idx)
-
     mov_links = db.session.query(Movie, MovieLinks).join(MovieLinks, (Movie.id == MovieLinks.movie_id)) #get the movies from the database
 
     recom = [mov_links.filter(Movie.id == idx).first() for idx in recom_idx.index]
 #
-    return render_template("recommendations.html", movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags)
+    return render_template(url_for("recommendations.html", movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags))
 
 @app.route('/my_ratings')
 @login_required  # User must be authenticated
@@ -170,7 +166,7 @@ def my_ratings():
 
     movies = movies.paginate(page=page, per_page=per_page) #paginating them
 
-    return render_template("movies.html", movies = movies, pagination=pagination, db = db, user = user, Ratings = Ratings, MovieTags = MovieTags) #rendering movies.html template with movies and pagination object
+    return render_template(url_for("movies.html", movies = movies, pagination=pagination, db = db, user = user, Ratings = Ratings, MovieTags = MovieTags)) #rendering movies.html template with movies and pagination object
 
 # Start development web server
 if __name__ == '__main__':
