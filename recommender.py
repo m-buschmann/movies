@@ -13,6 +13,7 @@ import traceback
 
 from lenskit_tf import BPR
 import pickle
+import os
 
 # import sleep from python
 from time import sleep
@@ -48,10 +49,6 @@ app.app_context().push()  # create an app context before initializing db
 db.init_app(app)  # initialize database
 db.create_all()  # create database if necessary
 user_manager = UserManager(app, db, User)  # initialize Flask-User management
-
-#MODEL_PATH = url_for('instance', filename='BPR_model.pkl')
-
-import os
 
 # Get the directory of the current script
 current_directory = os.path.dirname(os.path.realpath(__file__))
@@ -113,7 +110,7 @@ def movies_page():
         db.session.rollback()
         print(f"An error occurred: {e}")
 
-@app.route('/rate', methods=['POST'])
+@app.route('/rate')
 @login_required  # User must be authenticated
 def rate():
     # get data from form
