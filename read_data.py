@@ -14,7 +14,7 @@ def check_and_read_data(db):
     # read data if database is empty
     if Movie.query.count() == 0:
         # read movies from csv
-        with open(url_for('data', filename='movies.csv'), newline='', encoding='utf8') as csvfile:
+        with open(url_for('data', filename='movies.csv', newline='', encoding='utf8')) as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -41,7 +41,7 @@ def check_and_read_data(db):
                         pass
 
     if MovieLinks.query.count() == 0:   
-        with open(url_for('data', filename='links.csv'), newline='', encoding='utf8') as csvfile:
+        with open(url_for('data', filename='links.csv', newline='', encoding='utf8')) as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -63,7 +63,7 @@ def check_and_read_data(db):
                         db.session.rollback()
 
     if MovieTags.query.count() == 0:
-        with open(url_for('data', filename='tags.csv'), newline='', encoding='utf8') as csvfile:
+        with open(url_for('data', filename='tags.csv', newline='', encoding='utf8')) as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
@@ -81,7 +81,7 @@ def check_and_read_data(db):
                         db.session.rollback()
 
     if Ratings.query.count() == 0:
-        with open(url_for('data', filename='ratings.csv'), newline='', encoding='utf8') as csvfile:
+        with open(url_for('data', filename='ratings.csv', newline='', encoding='utf8')) as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
             # Skip the header line
