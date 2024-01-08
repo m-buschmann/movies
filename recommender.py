@@ -85,7 +85,7 @@ def fitBPR_command():
 @app.route('/')
 def home_page():
     # render home.html template
-    return render_template("home.html", app_name = user_manager.USER_APP_NAME)
+    return render_template("home.html")
 
 
 # The Members page is only accessible to authenticated users via the @login_required decorator
