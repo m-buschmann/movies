@@ -24,7 +24,7 @@
       <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
     <![endif]-->
 
-    {# *** Allow sub-templates to insert extra html to the head section; user_manager.USER_APP_NAME*** #}
+    {# *** Allow sub-templates to insert extra html to the head section *** #}
     {% block extra_css %}{% endblock %}
   </head>
 
@@ -32,7 +32,7 @@
 <body>
     {% block body %}
     <div id="header-div" class="clearfix with-margins">
-        <div class="pull-left"><a href="/"><h1 class="no-margins">{{ url_for('home_page') }}</h1></a></div>
+        <div class="pull-left"><a href={{url_for('home_page')}}><h1 class="no-margins">{{ user_manager.USER_APP_NAME }}</h1></a></div>
         <div class="pull-right">
             {% if call_or_get(current_user.is_authenticated) %}
                 <a href="{{ url_for('user.edit_user_profile') }}">{{ current_user.username or current_user.email }}</a>
