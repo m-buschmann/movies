@@ -30,7 +30,7 @@ class ConfigClass(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # Avoids SQLAlchemy warning
 
     # Flask-User settings
-    USER_APP_NAME = "Movie Recommender2"  # Shown in and email templates and page footers
+    USER_APP_NAME = "Movie Recommender"  # Shown in and email templates and page footers
     USER_ENABLE_EMAIL = False  # Disable email authentication
     USER_ENABLE_USERNAME = True  # Enable username authentication
     USER_REQUIRE_RETYPE_PASSWORD = True  # Simplify register form
@@ -85,7 +85,7 @@ def fitBPR_command():
 @app.route('/')
 def home_page():
     # render home.html template
-    return render_template("home.html")
+    return render_template("home.html", user_manager_user_app_name = ConfigClass.USER_APP_NAME)
 
 
 # The Members page is only accessible to authenticated users via the @login_required decorator
