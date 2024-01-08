@@ -124,8 +124,8 @@ def reset():
         db.session.delete(rating)
         db.session.commit()
 
-        return render_template("home.html")
-
+        return movies_page()
+    
     except Exception as e:
         db.session.rollback()
         print(f"An error occurred: {e}")
