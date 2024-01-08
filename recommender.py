@@ -156,7 +156,7 @@ def recommendations():
 
     recom_idx = loaded_model.predict_for_user(user, movies) # get recommendations for the current user
     recom_idx = recom_idx.sort_values(ascending=False)[:RECOMMENDATIONS]#sort the series by value#
-
+    print(recom_idx[1][1])
     mov_links = db.session.query(Movie, MovieLinks).join(MovieLinks, (Movie.id == MovieLinks.movie_id)) #get the movies from the database
 
     recom = [mov_links.filter(Movie.id == idx).first() for idx in recom_idx.index]

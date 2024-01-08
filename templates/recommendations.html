@@ -7,6 +7,7 @@
         <div class="panel panel-default">
             <div class="panel-heading"><b>{{ m.title }}</b></div> <!-- Movie title -->
             <div class="panel-body">
+                Percentage : {{percentage[loop.index0]}}
 
                 <!-- Movie links -->
                 <p>
@@ -27,11 +28,6 @@
                     {% endfor %}
                 </p>
 
-                <p>
-                    <!-- percantages -->
-                    <span class="label label-primary">{{ percentage[1] }}</span> <!-- Movie percentage -->
-
-                </p>
 
 
             </div>
