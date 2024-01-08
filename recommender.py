@@ -110,26 +110,6 @@ def movies_page():
         db.session.rollback()
         print(f"An error occurred: {e}")
 
-@app.route('/reset', methods=['POST'])
-@login_required  # User must be authenticated
-def reset():
-    try:
-        # get user id
-        user = current_user.id
-
-        # get all ratings for the current user
-        movieID = request.form.get('movieid')
-        rating = pd.read_sql( db.session.query(Ratings).filter(Ratings.user_id == user).filter(Ratings.movie_id==movieID).statement, con= db.session.connection())
-
-        db.session.delete(rating)
-        db.session.commit()
-
-        return movies_page()
-    
-    except Exception as e:
-        db.session.rollback()
-        print(f"An error occurred: {e}")
-        
 @app.route('/rate', methods=['POST'])
 @login_required  # User must be authenticated
 def rate():
@@ -152,7 +132,7 @@ def rate():
 
     #TODO add loading screen
 
-    return render_template("movies.html", rating=rating_value)
+    return render_template("rated.html", rating=rating_value)
 
 @app.route('/recommendations')
 @login_required  # User must be authenticated
