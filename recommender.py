@@ -30,7 +30,7 @@ class ConfigClass(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # Avoids SQLAlchemy warning
 
     # Flask-User settings
-    USER_APP_NAME = "Movie Recommender"  # Shown in and email templates and page footers
+    USER_APP_NAME = "Movie Recommender2"  # Shown in and email templates and page footers
     USER_ENABLE_EMAIL = False  # Disable email authentication
     USER_ENABLE_USERNAME = True  # Enable username authentication
     USER_REQUIRE_RETYPE_PASSWORD = True  # Simplify register form
@@ -41,7 +41,6 @@ class ConfigClass(object):
     USER_AFTER_LOGOUT_ENDPOINT = 'home_page'
     USER_AFTER_REGISTER_ENDPOINT = 'home_page'
     USER_AFTER_CONFIRM_ENDPOINT = 'home_page'
-    #USER_APP_NAME_ENDPOINT = 'home_page' #?
 
 # Create Flask app
 app = Flask(__name__)
