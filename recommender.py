@@ -161,7 +161,7 @@ def recommendations():
 
     recom = [mov_links.filter(Movie.id == idx).first() for idx in recom_idx.index]
 
-    return render_template("recommendations.html", movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags, percentage = list(recom_idx))
+    return render_template("recommendations.html", movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags, percentage = list(recom_idx[1]))
 
 @app.route('/my_ratings')
 @login_required  # User must be authenticated
