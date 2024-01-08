@@ -3,11 +3,11 @@
 <div class="container"> <!-- Container for Movies + its information -->
     <h2>Recommendations</h2>
    
-    {% for m, l in movies %}
+    {% for m, l, percent in zip(movies, percentage) %}
         <div class="panel panel-default">
             <div class="panel-heading"><b>{{ m.title }}</b></div> <!-- Movie title -->
             <div class="panel-body">
-                Percentage : {{percentage[1]}}
+                Percentage : {{percent}}
 
                 <!-- Movie links -->
                 <p>
