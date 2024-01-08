@@ -38,8 +38,9 @@
                     
                 <div class="panel-footer movie-rating">You have rated {{ rating.rating|int }} Stars, thank you!</div>
                 <!--TODO Reset Button-->
-                {% else %}
                 <a href="#" class="card-link" data-movieid="{{ m.id }}" >Reset</a>
+                
+                {% else %}
 
                 <div class="panel-footer movie-rating">Rate:
                     <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=1 >⭐</a>
@@ -85,6 +86,12 @@
         // Send the request with the movie ID and the rating
         xhr.send('movieid=' + movieid);
 
+    }
+
+    // Attach the event listener to each rating link
+    var links = document.querySelectorAll('.movie-rating .card-link');
+    for (var i = 0; i < links.length; i++) {
+        links[i].addEventListener('click', rateMovie);
     }
 
     // Function to handle the click event on any rating link
