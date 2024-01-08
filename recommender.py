@@ -41,7 +41,7 @@ class ConfigClass(object):
     USER_AFTER_LOGOUT_ENDPOINT = 'home_page'
     USER_AFTER_REGISTER_ENDPOINT = 'home_page'
     USER_AFTER_CONFIRM_ENDPOINT = 'home_page'
-    USER_APP_NAME_ENDPOINT = 'home_page' #?
+    #USER_APP_NAME_ENDPOINT = 'home_page' #?
 
 # Create Flask app
 app = Flask(__name__)
