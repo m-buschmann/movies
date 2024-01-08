@@ -124,7 +124,7 @@ def reset():
         db.session.delete(rating)
         db.session.commit()
 
-        return render_template("reset.html")
+        return render_template("home.html")
 
     except Exception as e:
         db.session.rollback()
