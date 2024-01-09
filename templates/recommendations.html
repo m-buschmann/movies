@@ -6,7 +6,7 @@
     {% for i in range (0,movies|length) %}
          {% set m = movies[i] %}
          {% set l = movies[i] %}
-         {% set percentage = percentage[i] | round(2) %}
+         {% set percentage = percentage[i]%}
 
         <div class="panel panel-default">
             <div class="panel-heading"><b>{{ m.title }}</b></div> <!-- Movie title -->
