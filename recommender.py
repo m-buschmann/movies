@@ -187,7 +187,7 @@ def recommendations():
 
     # Convert the rounded list to a string with 2 decimal places
     percentage = ", ".join(["{:.2f}%".format(x) for x in percentage])
-
+    print(percentage)
 
     mov_links = db.session.query(Movie, MovieLinks).join(MovieLinks, (Movie.id == MovieLinks.movie_id)) #get the movies from the database
     recom = [mov_links.filter(Movie.id == idx).first() for idx in recom_idx.index]

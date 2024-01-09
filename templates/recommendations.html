@@ -2,10 +2,8 @@
 {% block content %}
 <div class="container"> <!-- Container for Movies + its information -->
     <h2>Recommendations</h2>
-   
+    {% set count = 0 %}
     {% for m, l in movies %}
-         
-         {% set percentage = percentage[index0]%}
 
         <div class="panel panel-default">
             <div class="panel-heading"><b>{{m.title}}</b></div> <!-- Movie title -->
@@ -22,7 +20,9 @@
                         <span class="label label-default">{{ g.genre }}</span> <!-- Movie genre -->
                     {% endfor %}
                 </p>
-                <p>matching score: {{ percentage }}%</p>
+                <p>matching score: {{ percentage[count] }}</p>
+                {% set count = count +1  %}
+
                 <p>
                     <!-- Movie tags -->
                     {% set tags = db.session.query(MovieTags).filter( m.id == MovieTags.movie_id).all()%}
