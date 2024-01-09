@@ -1,6 +1,6 @@
 # Contains parts from: https://flask-user.readthedocs.io/en/latest/quickstart_app.html
 
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for,jsonify
 from flask_user import login_required, UserManager, current_user
 from flask_paginate import Pagination, get_page_parameter
 
@@ -110,11 +110,31 @@ def movies_page():
         db.session.rollback()
         print(f"An error occurred: {e}")
 
+@app.route('/reset', methods=['POST'])
+@login_required  # User must be authenticated
+def reset():
+    # get data from form
+    movieid = request.form.get('movieId')
+    userid = current_user.id
+
+    #check if rating already exists
+    rating = Ratings.query.filter(Ratings.user_id == userid, Ratings.movie_id == movieid).first()
+
+    if rating: #TODO add reset
+        # save rating to database
+        print(rating)
+        db.session.delete(rating)
+        db.session.commit()
+
+    #TODO add loading screen
+
+    return jsonify({"status": "success", "message": "Rating submitted successfully"})
+
 @app.route('/rate', methods=['POST'])
 @login_required  # User must be authenticated
 def rate():
     # get data from form
-    movieid = request.form.get('movieid')
+    movieid = request.form.get('movieId')
     rating_value = request.form.get('rating')
     userid = current_user.id
 
@@ -126,13 +146,13 @@ def rate():
     if not rating: #TODO add reset
         # save rating to database
         new_rate = Ratings(user_id=userid, movie_id=movieid, rating=rating_value, timestamp=datetime.now())
-
+        print(rating)
         db.session.add(new_rate)
         db.session.commit()
 
     #TODO add loading screen
 
-    return render_template("rated.html", rating=rating_value)
+    return jsonify({"status": "success", "message": "Rating submitted successfully"})
 
 @app.route('/recommendations')
 @login_required  # User must be authenticated
