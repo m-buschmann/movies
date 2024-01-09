@@ -128,7 +128,7 @@ def reset():
 
     #TODO add loading screen
 
-    return jsonify({"status": "success", "message": "Rating submitted successfully"})
+    return jsonify({"status": "success", "message": "Rating deleted successfully"})
 
 @app.route('/rate', methods=['POST'])
 @login_required  # User must be authenticated
@@ -192,7 +192,7 @@ def recommendations():
     mov_links = db.session.query(Movie, MovieLinks).join(MovieLinks, (Movie.id == MovieLinks.movie_id)) #get the movies from the database
     recom = [mov_links.filter(Movie.id == idx).first() for idx in recom_idx.index]
 
-    return render_template("recommendations.html", movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags, percentage = percentage)
+    return render_template("recommendations.html", movies_and_percentages=zip(recom, percentage.split(', ')), movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags)
 
 @app.route('/my_ratings')
 @login_required  # User must be authenticated

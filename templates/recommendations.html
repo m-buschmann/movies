@@ -18,7 +18,7 @@
 <div class="container"> <!-- Container for Movies + its information -->
     <h2>Recommendations</h2>
     {% set count = 0 %}
-    {% for m, l in movies %}
+    {% for (m,l), p in movies_and_percentages %}
 
         <div class="panel panel-default panel-purple">
             <div class="panel-heading"><b>{{m.title}}</b></div> <!-- Movie title -->
@@ -35,7 +35,9 @@
                         <span class="label label-default">{{ g.genre }}</span> <!-- Movie genre -->
                     {% endfor %}
                 </p>
-                <p>matching score: {{ percentage[count] }}</p>
+                <p>
+                    matching score: {{ p }}
+                </p>
                 {% set count = count +1  %}
 
                 <p>
