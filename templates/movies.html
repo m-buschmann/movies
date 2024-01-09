@@ -1,16 +1,30 @@
 {% extends "flask_user_layout.html" %}
 {% block content %}
+<style>
+      .panel-purple {
+        background-color: #2c0337; /* Purple color code for the panel */
+        color: white; /* Text color for the panel content */
+    }
 
+    .panel-purple .panel-heading {
+        background-color: #441c4e; /* Purple color code for the panel */
+        color: white; /* Text color for the panel content */
+    }
+    .panel-purple .panel-footer {
+        background-color: #441c4e; /* Purple color code for the panel */
+        color: white; /* Text color for the panel content */
+    }
+</style>
   
-<div class="container"> <!-- Container for Movies + its information -->
+<div class="container "> <!-- Container for Movies + its information -->
     <h2>Movies</h2>
     <!--TODO Search bar-->
     {{ pagination.info }} <!-- Displaying  displaying 1 - 20 records in total 9737    -->
     {{ pagination.links }} <!-- Chossing the page -->
 
     {% for m, l in movies %}
-        <div class="panel panel-default">
-            <div class="panel-heading"><b>{{ m.title }}</b></div> <!-- Movie title -->
+        <div class="panel panel-default panel-purple">
+            <div class="panel-heading 2"><b>{{ m.title }}</b></div> <!-- Movie title -->
             <div class="panel-body">
 
                 <!-- Movie links -->
@@ -122,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Example using jQuery for simplicity:
         $.ajax({
             type: "POST",
-            url: '{{ url_for("reset") }}',  // Replace with the actual endpoint for rating
+            url: 'c',  // Replace with the actual endpoint for rating
             data: { movieId: movieId },
             success: function(response) {
                 location.reload();

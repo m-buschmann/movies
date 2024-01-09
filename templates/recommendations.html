@@ -1,11 +1,26 @@
 {% extends "flask_user_layout.html" %}
 {% block content %}
+<style>
+    .panel-purple {
+      background-color: #170337; /* Purple color code for the panel */
+      color: white; /* Text color for the panel content */
+  }
+
+  .panel-purple .panel-heading {
+      background-color: #291c4e; /* Purple color code for the panel */
+      color: white; /* Text color for the panel content */
+  }
+  .panel-purple .panel-footer {
+      background-color: #291c4e; /* Purple color code for the panel */
+      color: white; /* Text color for the panel content */
+  }
+</style>
 <div class="container"> <!-- Container for Movies + its information -->
     <h2>Recommendations</h2>
     {% set count = 0 %}
     {% for m, l in movies %}
 
-        <div class="panel panel-default">
+        <div class="panel panel-default panel-purple">
             <div class="panel-heading"><b>{{m.title}}</b></div> <!-- Movie title -->
             <div class="panel-body">
 

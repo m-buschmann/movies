@@ -11,10 +11,17 @@
 
     <!-- In-lining styles to avoid needing a separate .css file -->
     <style>
-        hr { border-color: #cccccc; margin: 0; }
+        body {
+            background-color: black;
+            color: white;
+        }
+        hr { border-color: #190028; margin: 0; }
         .no-margins { margin: 0px; }
         .with-margins { margin: 10px; }
         .col-centered { float: none; margin: 0 auto; }
+        a {
+        color: #661588; /* Purple color code */
+    }
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -26,10 +33,14 @@
 
     {# *** Allow sub-templates to insert extra html to the head section *** #}
     {% block extra_css %}{% endblock %}
+    
   </head>
 
 
 <body>
+    
+    
+
     {% block body %}
     <div id="header-div" class="clearfix with-margins">
         <div class="pull-left"><a href={{url_for('home_page')}}><h1 class="no-margins">{{ user_manager.USER_APP_NAME }}</h1></a></div>
