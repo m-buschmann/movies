@@ -3,13 +3,12 @@
 <div class="container"> <!-- Container for Movies + its information -->
     <h2>Recommendations</h2>
    
-    {% for i in range (0,movies|length) %}
-         {% set m = movies[i] %}
-         {% set l = movies[i] %}
-         {% set percentage = percentage[i]%}
+    {% for m, l in movies %}
+         
+         {% set percentage = percentage[index0]%}
 
         <div class="panel panel-default">
-            <div class="panel-heading"><b>{{ m.title }}</b></div> <!-- Movie title -->
+            <div class="panel-heading"><b>{{m.title}}</b></div> <!-- Movie title -->
             <div class="panel-body">
 
 
