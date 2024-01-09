@@ -176,12 +176,23 @@ def recommendations():
 
     recom_idx = loaded_model.predict_for_user(user, movies) # get recommendations for the current user
     recom_idx = recom_idx.sort_values(ascending=False)[:RECOMMENDATIONS]#sort the series by value#
-    print(recom_idx)
     
+    percentage = list(recom_idx)
+
+    # Multiply each element in the percentage list by 100 to convert to percentage
+    percentage = [x * 100 for x in percentage]
+
+    # Round each element in the percentage list to 2 decimal places
+    percentage = [round(x, 2) for x in percentage]
+
+    # Convert the rounded list to a string with 2 decimal places
+    percentage = ", ".join(["{:.2f}%".format(x) for x in percentage])
+
+
     mov_links = db.session.query(Movie, MovieLinks).join(MovieLinks, (Movie.id == MovieLinks.movie_id)) #get the movies from the database
     recom = [mov_links.filter(Movie.id == idx).first() for idx in recom_idx.index]
 
-    return render_template("recommendations.html", movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags, percentage = list(recom_idx))
+    return render_template("recommendations.html", movies = recom, db = db, user = current_user.id, Ratings = Ratings, MovieTags = MovieTags, percentage = percentage)
 
 @app.route('/my_ratings')
 @login_required  # User must be authenticated
