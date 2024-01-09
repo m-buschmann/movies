@@ -6,7 +6,7 @@
     {% for i in range (0,movies|length) %}
          {% set m = movies[i] %}
          {% set l = movies[i] %}
-         {% set percentage = percentage[i] %}
+         {% set percentage = percentage[i] | round(2) %}
 
         <div class="panel panel-default">
             <div class="panel-heading"><b>{{ m.title }}</b></div> <!-- Movie title -->
@@ -23,7 +23,7 @@
                         <span class="label label-default">{{ g.genre }}</span> <!-- Movie genre -->
                     {% endfor %}
                 </p>
-                <p>matching score: {{ percentage | round(2) }}%</p>
+                <p>matching score: {{ percentage }}%</p>
                 <p>
                     <!-- Movie tags -->
                     {% set tags = db.session.query(MovieTags).filter( m.id == MovieTags.movie_id).all()%}
