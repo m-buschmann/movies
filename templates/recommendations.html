@@ -12,7 +12,6 @@
             <div class="panel-heading"><b>{{ m.title }}</b></div> <!-- Movie title -->
             <div class="panel-body">
 
-                <!--TODO: Percentage : {{percentage[1]}} -->
 
                 <!-- Movie links -->
                 <p>
@@ -24,7 +23,7 @@
                         <span class="label label-default">{{ g.genre }}</span> <!-- Movie genre -->
                     {% endfor %}
                 </p>
-                <p>Percentage: {{ percentage }}%</p>
+                <p>matching score: {{ percentage | round(2) }}%</p>
                 <p>
                     <!-- Movie tags -->
                     {% set tags = db.session.query(MovieTags).filter( m.id == MovieTags.movie_id).all()%}
