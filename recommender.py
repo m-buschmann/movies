@@ -120,7 +120,7 @@ def reset():
     #check if rating already exists
     rating = Ratings.query.filter(Ratings.user_id == userid, Ratings.movie_id == movieid).first()
 
-    if rating: #TODO add reset
+    if rating: 
         # save rating to database
         print(rating)
         db.session.delete(rating)
@@ -143,7 +143,7 @@ def rate():
     #check if rating already exists
     rating = Ratings.query.filter(Ratings.user_id == userid, Ratings.movie_id == movieid).first()
 
-    if not rating: #TODO add reset
+    if not rating: 
         # save rating to database
         new_rate = Ratings(user_id=userid, movie_id=movieid, rating=rating_value, timestamp=datetime.now())
         print(rating)
