@@ -14,6 +14,12 @@
         background-color: #441c4e; /* Purple color code for the panel */
         color: white; /* Text color for the panel content */
     }
+    /* New style for the reset button */
+    .btn-purple {
+        background-color: #441c4e;
+        color: #dd9ff8;
+    }
+
 </style>
   
 <div class="container "> <!-- Container for Movies + its information -->
@@ -53,7 +59,7 @@
                     
                 <div class="panel-footer movie-rating">You have rated {{ rating.rating|int }} Stars, thank you!</div>
                 <!--TODO Reset Button-->
-               <button class="btn btn-link" data-movieid="{{ m.id }}" id="resetRating">Reset Rating</button>
+               <button class="btn btn-link btn-purple" data-movieid="{{ m.id }}" id="resetRating">Reset Rating</button>
                 {% else %}
 
                 <div class="panel-footer movie-rating">Rate:
