@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Example using jQuery for simplicity:
         $.ajax({
             type: "POST",
-            url: 'c',  // Replace with the actual endpoint for rating
+            url: '{{ url_for("reset") }}',  // Replace with the actual endpoint for rating
             data: { movieId: movieId },
             success: function(response) {
                 location.reload();
