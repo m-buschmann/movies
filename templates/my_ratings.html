@@ -58,8 +58,8 @@
                 {% if rating%}
                     
                 <div class="panel-footer movie-rating">You have rated {{ rating.rating|int }} Stars, thank you!</div>
-                <!--TODO Reset Button-->
-               <button class="btn btn-link btn-purple" data-movieid="{{ m.id }}" id="resetRating">Reset Rating</button>
+
+                <button class="btn btn-link btn-purple" data-movieid="{{ m.id }}" id="resetRating">Reset Rating</button>
                 {% else %}
 
                 <div class="panel-footer movie-rating">Rate:
@@ -137,24 +137,55 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function reset(movieId) {
-        // Send an AJAX request to the server to update the rating
-        // You'll need to implement this function according to your server-side logic
-        // Example using jQuery for simplicity:
-        $.ajax({
-            type: "POST",
-            url: '{{ url_for("reset") }}',  // Replace with the actual endpoint for rating
-            data: { movieId: movieId },
-            success: function(response) {
+    // Count the number of movies on the page
+    var moviePanels = document.querySelectorAll('.panel.panel-default.panel-purple');
+    var movieCount = moviePanels.length;
+
+    // Extract the current page number from pagination links
+    var currentPageNumber = getCurrentPageNumber();
+
+    $.ajax({
+        type: "POST",
+        url: '{{ url_for("reset") }}',  // Replace with the actual endpoint for rating
+        data: { movieId: movieId },
+        success: function(response) {
+            if (movieCount <= 1) {
+                // If this is the last movie on the page
+                var redirectToPage = currentPageNumber > 1 ? currentPageNumber - 1 : 1;
+                window.location.href = updateUrlWithPage(redirectToPage); // Update this function as per your URL structure
+            } else {
                 location.reload();
-                // Handle success (if needed)
-                console.log(response);
-            },
-            error: function(error) {
-                // Handle error (if needed)
-                console.error(error);
             }
-        });
-    }
+            console.log(response);
+        },
+        error: function(error) {
+            console.error(error);
+        }
+    });
+}
+
+function getCurrentPageNumber() {
+    // Default to the first page if no page number is found
+    var defaultPageNumber = 1;
+
+    // Extract the 'page' query parameter from the current URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var pageNumber = urlParams.get('page');
+
+    return pageNumber ? parseInt(pageNumber) : defaultPageNumber;
+}
+
+function updateUrlWithPage(pageNumber) {
+    var url = new URL(window.location.href);
+    var searchParams = url.searchParams;
+
+    // Set the 'page' parameter to the new page number
+    searchParams.set('page', pageNumber);
+
+    // Return the updated URL
+    return url.toString();
+}
+
 </script>
 
 {% endblock %}
