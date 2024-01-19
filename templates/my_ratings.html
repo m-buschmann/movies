@@ -1,0 +1,160 @@
+{% extends "flask_user_layout.html" %}
+{% block content %}
+<style>
+      .panel-purple {
+        background-color: #2c0337; /* Purple color code for the panel */
+        color: white; /* Text color for the panel content */
+    }
+
+    .panel-purple .panel-heading {
+        background-color: #441c4e; /* Purple color code for the panel */
+        color: white; /* Text color for the panel content */
+    }
+    .panel-purple .panel-footer {
+        background-color: #441c4e; /* Purple color code for the panel */
+        color: white; /* Text color for the panel content */
+    }
+    /* New style for the reset button */
+    .btn-purple {
+        background-color: #441c4e;
+        color: #dd9ff8;
+    }
+
+</style>
+  
+<div class="container "> <!-- Container for Movies + its information -->
+    <h2>My Ratings</h2>
+    <!--TODO Search bar-->
+    {{ pagination.info }} <!-- Displaying  displaying 1 - 20 records in total 9737    -->
+    {{ pagination.links }} <!-- Chossing the page -->
+
+    {% for m, l in movies %}
+        <div class="panel panel-default panel-purple">
+            <div class="panel-heading 2"><b>{{ m.title }}</b></div> <!-- Movie title -->
+            <div class="panel-body">
+
+                <!-- Movie links -->
+                <p>
+                    <a href="{{ l.imdb_link }}"> Visit IMDb here</a><br>
+                    <a href="{{ l.tmdb_link }}">Visit TMDB here</a><br>
+                <p>
+                <!-- Movie genres -->
+                    {% for g in m.genres %}
+                        <span class="label label-default">{{ g.genre }}</span> <!-- Movie genre -->
+                    {% endfor %}
+                </p>
+                <p>
+                    <!-- Movie tags -->
+                    {% set tags = db.session.query(MovieTags).filter( m.id == MovieTags.movie_id).all()%}
+                    {% for t in tags %}
+                            <span class="label label-primary">{{ t.tag }}</span> <!-- Movie tag -->
+                    {% endfor %}
+                </p>
+
+            </div>
+            
+                {% set rating = db.session.query(Ratings).filter(Ratings.user_id == user, Ratings.movie_id == m.id).first()%}
+                
+                {% if rating%}
+                    
+                <div class="panel-footer movie-rating">You have rated {{ rating.rating|int }} Stars, thank you!</div>
+                <!--TODO Reset Button-->
+               <button class="btn btn-link btn-purple" data-movieid="{{ m.id }}" id="resetRating">Reset Rating</button>
+                {% else %}
+
+                <div class="panel-footer movie-rating">Rate:
+                    <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=1 >⭐</a>
+                    <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=2 >⭐</a>
+                    <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=3 >⭐</a>
+                    <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=4 >⭐</a>
+                    <a href="#" class="card-link" data-movieid="{{ m.id }}" rating=5 >⭐</a> Stars
+                </div>
+
+                {% endif %}	
+        </div>
+                
+                
+    {% endfor %}
+
+    {{ pagination.links }}  <!-- Choosing the page -->
+
+</div>
+
+
+    
+
+<script>        
+document.addEventListener("DOMContentLoaded", function() {
+        rating();
+    });
+
+        
+    function rating() {
+        // Add a click event listener to the container of star links
+        var container = document.querySelector('.container');
+        container.addEventListener('click', function (event) {
+            var starLink = event.target.closest('.panel-footer.movie-rating a.card-link');
+            if (starLink) {
+                event.preventDefault();
+
+                // Get the movie ID and rating from the clicked star link
+                var movieId = starLink.getAttribute('data-movieid');
+                var rating = starLink.getAttribute('rating');
+
+                // Call the server-side rating function
+                rate(movieId, rating);           
+            }
+              // Check if the reset button is clicked
+            var resetButton = event.target.closest('#resetRating');
+            if (resetButton) {
+                event.preventDefault();
+                var movieId = resetButton.getAttribute('data-movieid');
+
+                // Call the server-side reset function (implement it on the server side)
+                reset(movieId);}
+            });
+    }
+
+    
+        function rate(movieId, rating) {
+        // Send an AJAX request to the server to update the rating
+        // You'll need to implement this function according to your server-side logic
+        // Example using jQuery for simplicity:
+        $.ajax({
+            type: "POST",
+            url: '{{ url_for("rate") }}',  // Replace with the actual endpoint for rating
+            data: { movieId: movieId, rating: rating },
+            success: function(response) {
+                location.reload();
+                // Handle success (if needed)
+                console.log(response);
+            },
+            error: function(error) {
+                // Handle error (if needed)
+                console.error(error);
+            }
+        });
+    }
+
+    function reset(movieId) {
+        // Send an AJAX request to the server to update the rating
+        // You'll need to implement this function according to your server-side logic
+        // Example using jQuery for simplicity:
+        $.ajax({
+            type: "POST",
+            url: '{{ url_for("reset") }}',  // Replace with the actual endpoint for rating
+            data: { movieId: movieId },
+            success: function(response) {
+                location.reload();
+                // Handle success (if needed)
+                console.log(response);
+            },
+            error: function(error) {
+                // Handle error (if needed)
+                console.error(error);
+            }
+        });
+    }
+</script>
+
+{% endblock %}

@@ -212,7 +212,7 @@ def my_ratings():
 
     movies = movies.paginate(page=page, per_page=per_page) #paginating them
 
-    return render_template("movies.html", movies = movies, pagination=pagination, db = db, user = user, Ratings = Ratings, MovieTags = MovieTags) #rendering movies.html template with movies and pagination object
+    return render_template("my_ratings.html", movies = movies, pagination=pagination, db = db, user = user, Ratings = Ratings, MovieTags = MovieTags) #rendering movies.html template with movies and pagination object
 
 # Start development web server
 if __name__ == '__main__':
