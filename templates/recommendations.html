@@ -104,19 +104,17 @@ document.addEventListener("DOMContentLoaded", function() {
     
         function rate(movieId, rating) {
         // Send an AJAX request to the server to update the rating
-        // You'll need to implement this function according to your server-side logic
-        // Example using jQuery for simplicity:
         $.ajax({
             type: "POST",
-            url: '{{ url_for("rate") }}',  // Replace with the actual endpoint for rating
+            url: '{{ url_for("rate") }}',  // endpoint for rating
             data: { movieId: movieId, rating: rating },
             success: function(response) {
                 location.reload();
-                // Handle success (if needed)
+                // Handle success 
                 console.log(response);
             },
             error: function(error) {
-                // Handle error (if needed)
+                // Handle error 
                 console.error(error);
             }
         });

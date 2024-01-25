@@ -2,7 +2,7 @@ import csv
 from sqlalchemy.exc import IntegrityError
 from models import db, Movie, MovieGenre, MovieLinks, MovieTags, Ratings, User
 from flask import Flask, url_for
-from datetime import date, datetime
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///movie_recommender.sqlite'  # Update with your database URI #FIXME 
@@ -49,6 +49,7 @@ def check_and_read_data(db):
                         pass
 
     if MovieLinks.query.count() == 0:   
+        # adds imdb and tmdb links to the database
         with open(f'{file_path}/links.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
@@ -58,10 +59,6 @@ def check_and_read_data(db):
             print("Reading links")
             for row in reader:
                     try:
-                        
-                        #existing_movie = Movie.query.get(row[0]) # get movie with id = row[0]
-                        #print(existing_movie)
-
                         link = MovieLinks(movie_id= row[0], imdb_link=f"http://www.imdb.com/title/tt{row[1]}", tmdb_link=f"https://www.themoviedb.org/movie/{row[2]}")
                         db.session.add(link)
                         db.session.commit()  # save data to database
@@ -71,6 +68,7 @@ def check_and_read_data(db):
                         db.session.rollback()
 
     if MovieTags.query.count() == 0:
+        #adds tags to the database
         with open(f'{file_path}/tags.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
@@ -89,6 +87,7 @@ def check_and_read_data(db):
                         db.session.rollback()
 
     if Ratings.query.count() == 0:
+        #adds ratings to the database
         with open(f'{file_path}/ratings.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
 
@@ -101,7 +100,7 @@ def check_and_read_data(db):
                         rating = Ratings(user_id= row[0], movie_id=row[1], rating=row[2], timestamp= datetime.fromtimestamp(int(row[3])))
                         db.session.add(rating)
 
-                         #Check if user exists in the database
+                        #Check if user exists in the database
                         existing_user = db.session.query(User).filter_by(id=row[0]).first()
 
                         if not existing_user:

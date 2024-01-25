@@ -24,7 +24,7 @@
   
 <div class="container "> <!-- Container for Movies + its information -->
     <h2>My Ratings</h2>
-    <!--TODO Search bar-->
+
     {{ pagination.info }} <!-- Displaying  displaying 1 - 20 records in total 9737    -->
     {{ pagination.links }} <!-- Chossing the page -->
 
@@ -118,19 +118,17 @@ document.addEventListener("DOMContentLoaded", function() {
     
         function rate(movieId, rating) {
         // Send an AJAX request to the server to update the rating
-        // You'll need to implement this function according to your server-side logic
-        // Example using jQuery for simplicity:
         $.ajax({
             type: "POST",
-            url: '{{ url_for("rate") }}',  // Replace with the actual endpoint for rating
+            url: '{{ url_for("rate") }}',  // endpoint for rating
             data: { movieId: movieId, rating: rating },
             success: function(response) {
                 location.reload();
-                // Handle success (if needed)
+                // Handle success 
                 console.log(response);
             },
             error: function(error) {
-                // Handle error (if needed)
+                // Handle error 
                 console.error(error);
             }
         });
@@ -146,13 +144,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     $.ajax({
         type: "POST",
-        url: '{{ url_for("reset") }}',  // Replace with the actual endpoint for rating
+        url: '{{ url_for("reset") }}',  //  endpoint for rating
         data: { movieId: movieId },
         success: function(response) {
             if (movieCount <= 1) {
                 // If this is the last movie on the page
                 var redirectToPage = currentPageNumber > 1 ? currentPageNumber - 1 : 1;
-                window.location.href = updateUrlWithPage(redirectToPage); // Update this function as per your URL structure
+                window.location.href = updateUrlWithPage(redirectToPage); 
             } else {
                 location.reload();
             }

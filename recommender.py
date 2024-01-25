@@ -1,10 +1,10 @@
 # Contains parts from: https://flask-user.readthedocs.io/en/latest/quickstart_app.html
 
-from flask import Flask, render_template, request, url_for,jsonify
+from flask import Flask, render_template, request, jsonify
 from flask_user import login_required, UserManager, current_user
 from flask_paginate import Pagination, get_page_parameter
 
-from models import db, User, Movie, MovieGenre, MovieLinks, MovieTags, Ratings
+from models import db, User, Movie, MovieLinks, MovieTags, Ratings
 from read_data import check_and_read_data
 
 from datetime import datetime
@@ -14,9 +14,6 @@ import traceback
 from lenskit_tf import BPR
 import pickle
 import os
-
-# import sleep from python
-from time import sleep
 
 # Class-based application configuration
 class ConfigClass(object):
@@ -88,11 +85,11 @@ def home_page():
     return render_template("home.html")
 
 
-# The Members page is only accessible to authenticated users via the @login_required decorator
+# The Meovies page is only accessible to authenticated users via the @login_required decorator
 @app.route('/movies')
 @login_required  # User must be authenticated
 def movies_page():
-
+    """Movies page"""
     try:
         page = request.args.get(get_page_parameter(), type=int, default=1) #getting page number from url
     
@@ -113,6 +110,7 @@ def movies_page():
 @app.route('/reset', methods=['POST'])
 @login_required  # User must be authenticated
 def reset():
+    """Reset rating for a movie"""
     # get data from form
     movieid = request.form.get('movieId')
     userid = current_user.id
@@ -126,13 +124,12 @@ def reset():
         db.session.delete(rating)
         db.session.commit()
 
-    #TODO add loading screen
-
     return jsonify({"status": "success", "message": "Rating deleted successfully"})
 
 @app.route('/rate', methods=['POST'])
 @login_required  # User must be authenticated
 def rate():
+    """Rate a movie"""
     # get data from form
     movieid = request.form.get('movieId')
     rating_value = request.form.get('rating')
@@ -150,14 +147,13 @@ def rate():
         db.session.add(new_rate)
         db.session.commit()
 
-    #TODO add loading screen
 
     return jsonify({"status": "success", "message": "Rating submitted successfully"})
 
 @app.route('/recommendations')
 @login_required  # User must be authenticated
 def recommendations():
-
+    """Movie recommendations page"""
     RECOMMENDATIONS = 10
 
     # get user id
@@ -175,7 +171,7 @@ def recommendations():
     ratings = ratings.squeeze() # put them in a pd.Series
 
     recom_idx = loaded_model.predict_for_user(user, movies) # get recommendations for the current user
-    recom_idx = recom_idx.sort_values(ascending=False)[:RECOMMENDATIONS]#sort the series by value#
+    recom_idx = recom_idx.sort_values(ascending=False)[:RECOMMENDATIONS]#sort the series by value
     
     percentage = list(recom_idx)
 
@@ -197,7 +193,7 @@ def recommendations():
 @app.route('/my_ratings')
 @login_required  # User must be authenticated
 def my_ratings():
-
+    """My ratings page"""
     page = request.args.get(get_page_parameter(), type=int, default=1) #getting page number from url
  
     per_page = 20 #number of movies shown per page
@@ -205,7 +201,6 @@ def my_ratings():
     user = current_user.id
 
     #find all movies that the user has rated
-
     movies = db.session.query(Movie, MovieLinks).outerjoin(Ratings, (Ratings.movie_id == Movie.id) & (Ratings.user_id == user)).filter(Ratings.id != None).join(MovieLinks, (Movie.id == MovieLinks.movie_id))
 
     pagination = Pagination(page=page, total=len(movies.all()), per_page=per_page, css_framework='bootstrap4') #creating pagination object

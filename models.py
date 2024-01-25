@@ -1,6 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import UserMixin
-import datetime
 db = SQLAlchemy()
 
 # Define the User data-model.
